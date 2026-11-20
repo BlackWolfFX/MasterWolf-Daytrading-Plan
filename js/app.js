@@ -328,6 +328,7 @@ document.querySelectorAll('.nav-tab').forEach(tab=>{
     tab.classList.add('active');
     document.getElementById('view-'+tab.dataset.view).classList.add('active');
     if(tab.dataset.view==='stats'){loadStats();}
+    try { tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); } catch(e){}
   });
 });
 

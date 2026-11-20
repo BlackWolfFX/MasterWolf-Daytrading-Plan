@@ -1,10 +1,10 @@
-:root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9A7230;--gold-glow:rgba(201,168,76,0.18);--gold-border:rgba(201,168,76,0.35);--bg:#0A0A0A;--bg-card:#111111;--bg-elevated:#161616;--bg-input:#1A1A1A;--text:#F0EDE6;--text-muted:#7A7570;--text-dim:#4A4540;--buy:#2ECC71;--buy-dim:rgba(46,204,113,0.15);--sell:#E74C3C;--sell-dim:rgba(231,76,60,0.15);--radius:6px;--transition:0.28s cubic-bezier(0.4,0,0.2,1);color-scheme:dark}
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9A7230;--gold-glow:rgba(201,168,76,0.18);--gold-border:rgba(201,168,76,0.35);--bg:#0A0A0A;--bg-card:#111111;--bg-elevated:#161616;--bg-input:#1A1A1A;--text:#F0EDE6;--text-muted:#7A7570;--text-dim:#4A4540;--buy:#2ECC71;--buy-dim:rgba(46,204,113,0.15);--sell:#E74C3C;--sell-dim:rgba(231,76,60,0.15);--radius:6px;--transition:0.28s cubic-bezier(0.4,0,0.2,1);color-scheme:dark;--header-h:64px;--nav-h:48px;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px)}
 [data-theme="light"]{--bg:#F5F2ED;--bg-card:#FFFFFF;--bg-elevated:#ECECEC;--bg-input:#F0EDE6;--text:#1A1510;--text-muted:#7A7060;--text-dim:#BCBAB5;--gold-glow:rgba(201,168,76,0.12);--gold-border:rgba(154,114,48,0.3);color-scheme:light}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#F5F2ED;--bg-card:#FFFFFF;--bg-elevated:#ECECEC;--bg-input:#F0EDE6;--text:#1A1510;--text-muted:#7A7060;--text-dim:#BCBAB5;--gold-glow:rgba(201,168,76,0.12);--gold-border:rgba(154,114,48,0.3);color-scheme:light}}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden}
-#header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;background:var(--bg);border-bottom:1px solid var(--gold-border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;backdrop-filter:blur(12px)}
+#header{position:sticky;top:var(--safe-top);z-index:100;background:var(--bg);border-bottom:1px solid var(--gold-border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:var(--header-h);backdrop-filter:blur(12px)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:101;background:var(--bg)}
 .logo{font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:0.1em;color:var(--gold);text-transform:uppercase}
 .logo span{color:var(--text-muted);font-weight:400}
@@ -354,11 +354,11 @@ select.input-field{cursor:pointer}
 
 /* ── PREMIUM INSTITUTIONAL COCKPIT UPGRADE ── */
 body{background-image:radial-gradient(circle at 15% 0%,rgba(201,168,76,0.06) 0%,transparent 45%),radial-gradient(circle at 85% 100%,rgba(201,168,76,0.04) 0%,transparent 40%);background-attachment:fixed}
-#header{background:rgba(10,10,10,0.85);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,168,76,0.28);box-shadow:0 4px 30px rgba(0,0,0,0.45);height:64px}
+#header{background:rgba(10,10,10,0.85);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,168,76,0.28);box-shadow:0 4px 30px rgba(0,0,0,0.45);height:var(--header-h)}
 [data-theme="light"] #header{background:rgba(245,242,237,0.88);box-shadow:0 4px 24px rgba(0,0,0,0.06)}
 .logo{font-size:13px;letter-spacing:0.14em;display:flex;align-items:center;gap:6px}
 .logo::before{content:"🐺";font-size:16px;filter:drop-shadow(0 0 8px rgba(201,168,76,0.4))}
-#nav{background:rgba(14,14,14,0.72);backdrop-filter:blur(12px);padding:8px 24px;gap:6px;border-bottom:1px solid rgba(201,168,76,0.22);position:sticky;top:64px;z-index:95}
+#nav{background:rgba(14,14,14,0.72);backdrop-filter:blur(12px);padding:8px 24px;gap:6px;border-bottom:1px solid rgba(201,168,76,0.22);position:sticky;top:calc(var(--header-h) + var(--safe-top));z-index:95}
 [data-theme="light"] #nav{background:rgba(245,242,237,0.85)}
 .nav-tab{border-radius:6px;padding:8px 14px;border-bottom:none;font-weight:600;letter-spacing:0.06em;position:relative;transition:all 0.25s ease}
 .nav-tab:hover{background:rgba(201,168,76,0.08);color:var(--gold-light)}
@@ -1137,4 +1137,567 @@ body.zen-focus-mode .check-item.checked {
   font-size: 11.5px;
   color: var(--text-muted);
   line-height: 1.5;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   V15 — SYSTÈME RESPONSIVE COMPLET & TOUS ÉCRANS (Mobile, Tablette, Desktop)
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Optimisations Tactiles & Globales ── */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+}
+
+button, input, select, textarea, .nav-tab, .bias-btn, .check-item, .saison-tab, .saison-cat-btn {
+  touch-action: manipulation;
+}
+
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── 2. Tableaux Pleinement Responsifs & Swipe Touch ── */
+.regime-table, .fib-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.card table {
+  margin: 0;
+}
+
+.table-responsive,
+.card[style*="overflow-x:auto"],
+.card[style*="overflow-x: auto"] {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* ── 3. Flow IPDA Responsif ── */
+.ipda-cycle-flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+/* ── 4. Barres de Navigation Saisonnière avec Défilement Fluide ── */
+.saison-cat-bar,
+.saison-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 2px 10px;
+}
+
+.saison-cat-bar::-webkit-scrollbar,
+.saison-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.saison-cat-btn,
+.saison-tab {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ── 5. Breakpoint Tablette & Petits Écrans (<= 1024px) ── */
+@media (max-width: 1024px) {
+  .view {
+    max-width: 100%;
+    padding: 28px 20px 85px;
+  }
+  .macro-cols {
+    gap: 16px;
+  }
+}
+
+/* ── 6. Breakpoint Tablette Portrait & Grands Smartphones (<= 768px) ── */
+@media (max-width: 768px) {
+  :root {
+    --header-h: 60px;
+  }
+  
+  #header {
+    padding: 0 16px;
+  }
+  
+  #nav {
+    padding: 6px 16px;
+    gap: 4px;
+    top: calc(var(--header-h) + var(--safe-top));
+  }
+  
+  .nav-tab {
+    padding: 8px 12px;
+    font-size: 10.5px;
+  }
+  
+  .view {
+    padding: 22px 16px 85px;
+  }
+  
+  .card {
+    padding: 20px 18px;
+    border-radius: 12px;
+  }
+  
+  .macro-cols {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  
+  .pda-rules-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .clock-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .abstention-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  /* Saisonnalité : passage en cartes empilées */
+  .month-row {
+    flex-direction: column;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .month-label {
+    min-width: 100%;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--gold-border);
+    padding: 11px 16px;
+  }
+  
+  .month-body {
+    padding: 13px 16px;
+  }
+  
+  /* Killzone panel empilé */
+  .kz-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .kz-countdown {
+    text-align: center;
+    font-size: 24px;
+  }
+  
+  .kz-slots {
+    justify-content: center;
+  }
+}
+
+/* ── 7. Breakpoint Smartphones Moyens & Petits (<= 600px) ── */
+@media (max-width: 600px) {
+  :root {
+    --header-h: 56px;
+    --nav-h: 44px;
+  }
+  
+  #header {
+    padding: 0 12px;
+    height: var(--header-h);
+  }
+  
+  .site-brand-logo {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .logo {
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+  }
+  
+  .logo-title-group {
+    font-size: 11px;
+    gap: 5px;
+  }
+  
+  /* Masquer la date textuelle du header pour préserver l'alignement */
+  .date-badge {
+    display: none;
+  }
+  
+  .header-actions {
+    gap: 6px;
+  }
+  
+  .kz-badge {
+    padding: 3px 8px;
+    font-size: 9.5px;
+    gap: 4px;
+  }
+  
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+  
+  #nav {
+    padding: 6px 10px;
+    top: calc(var(--header-h) + var(--safe-top));
+  }
+  
+  .nav-tab {
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+  
+  .view {
+    padding: 16px 12px 78px;
+  }
+  
+  .card {
+    padding: 16px 14px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+  }
+  
+  .page-title {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    margin-bottom: 20px;
+  }
+  
+  .section-title {
+    margin: 26px 0 12px;
+    font-size: 10.5px;
+    padding-left: 10px;
+  }
+  
+  /* Grilles formulaire */
+  .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .grid-3 {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  /* Prévention du zoom intempestif iOS sur focus d'input */
+  .input-field,
+  select.input-field,
+  textarea.input-field {
+    font-size: 16px !important;
+    padding: 10px 12px;
+  }
+  
+  /* Checklist mobile aérée et tactile */
+  .check-item {
+    padding: 12px 12px;
+    gap: 12px;
+    border-radius: 10px;
+  }
+  
+  .check-item:hover {
+    transform: none; /* Pas de décalage tactile sur mobile */
+  }
+  
+  .check-box {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+  }
+  
+  .check-title-main {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  
+  .check-line-row {
+    padding: 6px 9px;
+    font-size: 11.5px;
+    line-height: 1.45;
+    gap: 8px;
+  }
+  
+  .check-line-bullet {
+    font-size: 10px;
+  }
+  
+  .check-line-num {
+    font-size: 9.5px;
+    padding: 1px 5px;
+  }
+  
+  /* Sélecteur de Biais compact */
+  .bias-selector {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .bias-btn {
+    padding: 14px 10px;
+    border-radius: 10px;
+  }
+  
+  .bias-btn .bias-icon {
+    font-size: 22px;
+  }
+  
+  .bias-btn .bias-label {
+    font-size: 10.5px;
+  }
+  
+  /* Boîte Abstention */
+  .abstention-box {
+    padding: 14px 14px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .abst-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  
+  .abst-text {
+    font-size: 11.5px;
+  }
+  
+  /* Tableaux plus condensés sur mobile */
+  .regime-table th, .regime-table td {
+    padding: 8px 8px;
+    font-size: 10.5px;
+  }
+  
+  .fib-table th, .fib-table td {
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+  
+  /* PD Array Matrix sur Mobile */
+  .pda-matrix {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .pda-item {
+    padding: 8px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .pda-name {
+    font-size: 11.5px;
+    min-width: 130px;
+  }
+  
+  /* Statistiques Dashboard */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  
+  .stat-card {
+    padding: 12px 10px;
+    border-radius: 8px;
+  }
+  
+  .stat-num {
+    font-size: 19px;
+  }
+  
+  .stat-label {
+    font-size: 9px;
+  }
+  
+  /* SD Grid */
+  .sd-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  
+  .sd-cell {
+    padding: 8px;
+  }
+  
+  .sd-cell-val {
+    font-size: 13px;
+  }
+  
+  /* Flow IPDA */
+  .ipda-cycle-flow {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .ipda-cycle-flow > div[style*="font-size:16px"],
+  .ipda-cycle-flow > div:empty {
+    transform: rotate(90deg);
+    padding: 2px 0 !important;
+  }
+  
+  .ipda-cycle-flow > div {
+    width: 100%;
+    max-width: 260px;
+  }
+  
+  /* Modal responsive */
+  #modal-overlay {
+    padding: 10px;
+    padding-top: max(14px, var(--safe-top));
+    padding-bottom: max(14px, var(--safe-bottom));
+  }
+  
+  #modal {
+    padding: 18px 14px;
+    border-radius: 10px;
+    max-height: calc(100vh - 28px);
+  }
+  
+  .modal-title {
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+  
+  /* Bouton flottant CTA */
+  .floating-cta {
+    bottom: calc(var(--safe-bottom) + 14px);
+    right: max(12px, var(--safe-right));
+    padding: 10px 16px;
+    font-size: 10px;
+  }
+  
+  /* Macro wizard responsive */
+  .mw-q-card {
+    padding: 14px 14px;
+    border-radius: 10px;
+  }
+  
+  .mw-options-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .mw-regime-pills {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+/* ── 8. Breakpoint Petits Smartphones (<= 380px : iPhone SE, Galaxy Z Flip, etc.) ── */
+@media (max-width: 380px) {
+  .logo-title-group span {
+    display: none !important;
+  }
+  
+  .logo-title-group {
+    font-size: 10px;
+  }
+  
+  .kz-badge {
+    padding: 2px 6px;
+    font-size: 8.5px;
+  }
+  
+  .btn-icon {
+    width: 29px;
+    height: 29px;
+    font-size: 12px;
+  }
+  
+  .view {
+    padding: 12px 8px 75px;
+  }
+  
+  .card {
+    padding: 12px 10px;
+  }
+  
+  .check-item {
+    padding: 10px 8px;
+    gap: 8px;
+  }
+  
+  .check-line-row {
+    padding: 5px 6px;
+    font-size: 10.8px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sd-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 9. Mode Paysage sur Smartphone (Orientation Landscape) ── */
+@media (max-height: 520px) and (orientation: landscape) {
+  :root {
+    --header-h: 46px;
+    --nav-h: 38px;
+  }
+  
+  #header {
+    height: var(--header-h);
+  }
+  
+  .site-brand-logo {
+    width: 24px;
+    height: 24px;
+  }
+  
+  #nav {
+    padding: 4px 14px;
+    top: calc(var(--header-h) + var(--safe-top));
+  }
+  
+  .nav-tab {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+  
+  .view {
+    padding: 14px 20px 65px;
+  }
+  
+  #modal {
+    max-height: calc(100vh - 16px);
+    padding: 14px;
+  }
 }
