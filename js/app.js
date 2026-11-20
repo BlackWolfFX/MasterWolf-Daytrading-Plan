@@ -1534,13 +1534,25 @@ function autoSmartPrefill(){
     return;
   }
   const dow=new Date().getDay();
-  const prefix=currentBias==='buy'?'b':'s';
-  // Coche automatiquement le point 1 (Calendrier) et le point 2 (Filtre session/jour si Mar/Mer/Jeu)
-  const keysToCheck=[prefix+'1'];
-  if(dow>=2&&dow<=4)keysToCheck.push(prefix+'2');
-  // Si des éléments macro dans le même sens sont cochés (>=3), coche aussi le point 3
-  const macroSideCount=[...document.querySelectorAll(`.check-item[data-side="${currentBias}"]`)].filter(el=>el.classList.contains('checked')).length;
-  if(macroSideCount>=3)keysToCheck.push(prefix+'3');
+  // Préfixes selon mode : Express utilise exp-b/exp-s, Détaillé utilise b/s
+  const expPrefix=currentBias==='buy'?'exp-b':'exp-s';
+  const detPrefix=currentBias==='buy'?'b':'s';
+
+  let keysToCheck;
+  if(checklistMode==='express'){
+    // Express : coche Contrôle 1 (Calendrier) toujours, Contrôle 2 (Session) si Mar/Mer/Jeu
+    keysToCheck=[expPrefix+'1'];
+    if(dow>=2&&dow<=4)keysToCheck.push(expPrefix+'2');
+    // Si macro >=3 dans le bon sens, coche aussi Contrôle 3 (Structure)
+    const macroSideCount=[...document.querySelectorAll(`.check-item[data-side="${currentBias}"]`)].filter(el=>el.classList.contains('checked')).length;
+    if(macroSideCount>=3)keysToCheck.push(expPrefix+'3');
+  } else {
+    // Mode Détaillé : b1/s1, b2/s2, b3/s3
+    keysToCheck=[detPrefix+'1'];
+    if(dow>=2&&dow<=4)keysToCheck.push(detPrefix+'2');
+    const macroSideCount=[...document.querySelectorAll(`.check-item[data-side="${currentBias}"]`)].filter(el=>el.classList.contains('checked')).length;
+    if(macroSideCount>=3)keysToCheck.push(detPrefix+'3');
+  }
 
   keysToCheck.forEach(k=>{
     if(!checkStates[k]){
@@ -1604,15 +1616,25 @@ function copySessionBrief(){
   const abstCount=document.querySelectorAll('.abst-item.triggered').length;
   const checkedList=[];
   if(currentBias){
-    STEPS[currentBias].forEach(s=>s.items.forEach(i=>{
-      if(checkStates[i.key])checkedList.push('✓ '+i.text.replace(/<[^>]+>/g,'').split('—')[0].trim());
-    }));
+    if(checklistMode==='express'){
+      // Mode Express : lire les 10 contrôles Express
+      const items=(currentBias==='buy')?EXPRESS_BUY:EXPRESS_SELL;
+      items.forEach(i=>{
+        if(checkStates[i.key])checkedList.push('✓ ['+i.num+'] '+i.title);
+      });
+    } else {
+      // Mode Détaillé : lire les 5 phases
+      STEPS[currentBias].forEach(s=>s.items.forEach(i=>{
+        if(checkStates[i.key])checkedList.push('✓ '+i.text.replace(/<[^>]+>/g,'').split('—')[0].trim());
+      }));
+    }
   }
+  const modeLabel=checklistMode==='express'?'⚡ Fiche Express 60s':'📋 Pré-Session Détaillée';
   const brief=[
     `🐺 THE MASTERWOLF ICT PLAN — ${dateStr}`,
-    `• Biais : ${biasStr} | Probabilité : ${pct}`,
+    `• Mode : ${modeLabel} | Biais : ${biasStr} | Probabilité : ${pct}`,
     `• Feux rouges abstention : ${abstCount}`,
-    checkedList.length?'• Critères validés :\n  '+checkedList.join('\n  '):'• Aucun critère validé'
+    checkedList.length?'• Contrôles validés :\n  '+checkedList.join('\n  '):'• Aucun contrôle validé'
   ].join('\n');
   if(navigator.clipboard){
     navigator.clipboard.writeText(brief).then(()=>showToast('Brief copié dans le presse-papiers 📋'));
