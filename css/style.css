@@ -1701,3 +1701,150 @@ img, svg {
     padding: 14px;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   V16 — COCKPIT 60s & FICHE EXPRESS (Mode Séance & Calculateur Direct)
+   ════════════════════════════════════════════════════════════════════ */
+.cockpit-mode-bar {
+  margin: 16px 0 20px;
+}
+
+.cockpit-mode-tabs {
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--gold-border);
+  border-radius: 50px;
+  padding: 4px;
+  gap: 4px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.cockpit-mode-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 50px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-zen);
+  white-space: nowrap;
+}
+
+.cockpit-mode-btn.active {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--bg);
+  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.35);
+}
+
+.cockpit-mode-btn:hover:not(.active) {
+  color: var(--text);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.express-checklist-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.check-item.express-item {
+  border-left: 3px solid var(--gold-border);
+  transition: all 0.25s var(--ease-zen);
+}
+
+.check-item.express-item.checked {
+  border-left-color: var(--buy);
+  background: rgba(46, 204, 113, 0.06);
+}
+
+/* Calculateur Express Intégré Cockpit */
+.cockpit-calc-box {
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
+  border: 1.5px solid var(--gold-border);
+  border-radius: 14px;
+  padding: 22px;
+  margin-top: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+.cockpit-res-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.cockpit-res-card {
+  background: var(--bg-card);
+  border: 1px solid var(--gold-border);
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.cockpit-res-card.highlight {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.12), rgba(201, 168, 76, 0.04));
+  border-color: var(--gold);
+  box-shadow: 0 4px 18px rgba(201, 168, 76, 0.18);
+}
+
+.cp-res-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.cp-res-val {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.cp-res-val.gold {
+  color: var(--gold-light);
+  font-size: 24px;
+}
+
+.cp-res-val.buy {
+  color: var(--buy);
+}
+
+.cp-res-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .cockpit-res-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cockpit-mode-tabs {
+    max-width: 100%;
+  }
+  .cockpit-mode-btn {
+    font-size: 10px;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cockpit-res-grid {
+    grid-template-columns: 1fr;
+  }
+  .cockpit-calc-box {
+    padding: 16px 14px;
+  }
+}

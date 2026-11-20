@@ -1,4 +1,31 @@
-// ══ CHECKLIST DATA ══
+// ══ FICHE EXPRESS DE BUREAU (Section 8 v8 — 60 Secondes) ══
+const EXPRESS_BUY = [
+  { key: "exp-b1", num: "1", title: "Abstention Calendrier Forex Factory", desc: "Hors NFP (vendredi NFP interdit) · Hors PM FOMC/taux (14h NY) · Hors lendemain whipsaw FOMC · Hors matinée Bond Auction · Hors Bank Holiday US & veille férié · Hors multiples news Londres." },
+  { key: "exp-b2", num: "2", title: "Abstention Londres & Volatilité", desc: "Veille ≤ 2× ADR 5j · Pas de 3 clôtures Daily consécutives haussières · CBDR < 40 pips (20–30 idéal) · Asian Range 20–30 pips (≤ 20 pré-Francfort) · Sans London Sloppiness (20h NY) · Londres < 80 % ADR pour NY." },
+  { key: "exp-b3", num: "3", title: "Obligations & Taux US (Money Seeks Yield)", desc: "ZB/ZN/ZF haussiers + US10Y en baisse (pas in tandem avec DXY, pas de découplage < 3/4) · Gâchette SMT Triade 5Y/10Y/30Y vérifiée à 08:00–08:30 NY sur M15." },
+  { key: "exp-b4", num: "4", title: "Daily/H4, IPDA 20j & Biais Directionnel", desc: "Biais haussier Daily/H4 actif après réaction sur un Discount Array des 20 derniers jours (40/60j si épuisés) · Chemin fluide LRLR vers Premium opposé · Cohérent avec Dimanche/Lundi 00:00 NY Open." },
+  { key: "exp-b5", num: "5", title: "Amplitude Libre (≥ 50–60 pips Daytrade)", desc: "Espace d'au moins 50 à 60 pips libres jusqu'au PD Array Premium Daily/H4 opposé · Si espace < 40 pips, basculer impérativement en mode Scalp (R:R 1:1) ou s'abstenir." },
+  { key: "exp-b6", num: "6", title: "Projections & Fenêtre Horaire Killzone", desc: "Flout (< 50 %), 4 niveaux (Filling the Numbers), ADR 5j · Exécution dans London Open (01:00–05:00 NY, sweet spot 02h–04h) ou NY Open (07:00–10:00 NY après 08:20 CME) · JAMAIS avant la news." },
+  { key: "exp-b7", num: "7", title: "Profil Manipulation du Jour (Judas Swing)", desc: "Baisse sous 00:00 NY (Normal Protraction) ou Delayed Protraction à 02:00 NY · Retest Asian High en continuation NY sans Premium H4 opposé touché (en consolidation : sens Daily/H4 unique)." },
+  { key: "exp-b8", num: "8", title: "Sweep SSL + MSS + SMT Haussière", desc: "Purge Asian Low (-5 pips spread inclus) ou PDL/creux 3 jours + MSS M15/M5 (JAMAIS M1) + Confirmation SMT (DXY HH/GU HL, ou GU LL/DXY LH, ou GU HL/EU LL)." },
+  { key: "exp-b9", num: "9", title: "Entrée Discount Array & Vitesse M15", desc: "1er array actif depuis 50 % (Bullish Breaker prioritaire ➔ Liquidity Void/FVG + OTE 62–79 % ➔ Bullish OB) + Williams %R (10) M15 au plus baissier + réaction haussière immédiate sur M15." },
+  { key: "exp-b10", num: "10", title: "Risque ≤ 1 %, Stop 6 Cas & Sorties", desc: "Risque ≤ 1 % (0,5 % Scalp), max 2 setups/jour · SL exact (30/40/10 pips ou preset v8) · Breakeven uniquement à 40–50 % du range · Partiels 60–80 % avant ADR 5j (80 % avant 10h NY) · Fin 12h–15h NY." }
+];
+
+const EXPRESS_SELL = [
+  { key: "exp-s1", num: "1", title: "Abstention Calendrier Forex Factory", desc: "Hors NFP (vendredi NFP interdit) · Hors PM FOMC/taux (14h NY) · Hors lendemain whipsaw FOMC · Hors matinée Bond Auction · Hors Bank Holiday US & veille férié · Hors multiples news Londres." },
+  { key: "exp-s2", num: "2", title: "Abstention Londres & Volatilité", desc: "Veille ≤ 2× ADR 5j · Pas de 3 clôtures Daily consécutives baissières · CBDR < 40 pips (20–30 idéal) · Asian Range 20–30 pips (≤ 20 pré-Francfort) · Sans London Sloppiness (20h NY) · Londres < 80 % ADR pour NY." },
+  { key: "exp-s3", num: "3", title: "Obligations & Taux US (Money Seeks Yield)", desc: "ZB/ZN/ZF baissiers + US10Y en hausse (pas in tandem avec DXY, pas de découplage < 3/4) · Gâchette SMT Triade 5Y/10Y/30Y vérifiée à 08:00–08:30 NY sur M15." },
+  { key: "exp-s4", num: "4", title: "Daily/H4, IPDA 20j & Biais Directionnel", desc: "Biais baissier Daily/H4 actif après rejet d'un Premium Array des 20 derniers jours (40/60j si épuisés) · Chemin fluide LRLR vers Discount opposé · Cohérent avec Dimanche/Lundi 00:00 NY Open." },
+  { key: "exp-s5", num: "5", title: "Amplitude Libre (≥ 50–60 pips Daytrade)", desc: "Espace d'au moins 50 à 60 pips libres jusqu'au PD Array Discount Daily/H4 opposé · Si espace < 40 pips, basculer impérativement en mode Scalp (R:R 1:1) ou s'abstenir." },
+  { key: "exp-s6", num: "6", title: "Projections & Fenêtre Horaire Killzone", desc: "Flout (> 50 %), 4 niveaux (Filling the Numbers), ADR 5j · Exécution dans London Open (01:00–05:00 NY, sweet spot 02h–04h) ou NY Open (07h–10h après 08:20 CME) · JAMAIS avant la news." },
+  { key: "exp-s7", num: "7", title: "Profil Manipulation du Jour (Judas Swing)", desc: "Hausse au-dessus de 00:00 NY (Normal Protraction) ou Delayed Protraction à 02:00 NY · Retest Asian Low en continuation NY sans Discount H4 opposé touché (en consolidation : sens Daily/H4 unique)." },
+  { key: "exp-s8", num: "8", title: "Sweep BSL + MSS + SMT Baissière", desc: "Purge Asian High (+5 pips spread inclus) ou PDH/sommet 3 jours + MSS M15/M5 (JAMAIS M1) + Confirmation SMT (DXY HL/GU HH, ou DXY LL/GU LH, ou GU LH/EU HH)." },
+  { key: "exp-s9", num: "9", title: "Entrée Premium Array & Vitesse M15", desc: "1er array actif depuis 50 % (Bearish Breaker prioritaire ➔ Liquidity Void/FVG + OTE 62–79 % ➔ Bearish OB) + Williams %R (10) M15 au plus haussier + chute immédiate sur M15." },
+  { key: "exp-s10", num: "10", title: "Risque ≤ 1 %, Stop 6 Cas & Sorties", desc: "Risque ≤ 1 % (0,5 % Scalp), max 2 setups/jour · SL exact (30/40/10 pips ou preset v8) · Breakeven uniquement à 40–50 % du range · Partiels 60–80 % avant ADR 5j (80 % avant 10h NY) · Fin 12h–15h NY." }
+];
+
+// ══ CHECKLIST DATA DÉTAILLÉE (5 PHASES) ══
 const STEPS = {
   buy:[
     {step:"PHASE A",label:"Filtre d'Abstention & Biais Daily/H4 (Avant séance)",items:[
@@ -51,6 +78,7 @@ const STEPS = {
 };
 
 let currentBias=null,checkStates={},entries=[],pendingFiles=[];
+let checklistMode=localStorage.getItem('mw-checklist-mode')||'express';
 
 // ══ INIT ══
 document.addEventListener('DOMContentLoaded',()=>{
@@ -63,6 +91,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   updateMacroSynthese();
   startKillzoneTimer();
   initSaisonBanner();
+  initCockpitCalculator();
 });
 
 function updateDate(){
@@ -420,32 +449,76 @@ function formatChecklistItemHTML(rawText){
   return `<div class="check-content">${renderLinesHTML(rawText)}</div>`;
 }
 
+function setChecklistMode(mode){
+  checklistMode = mode;
+  localStorage.setItem('mw-checklist-mode', mode);
+  const btnExp = document.getElementById('btn-mode-express');
+  const btnDet = document.getElementById('btn-mode-detailed');
+  const pills = document.getElementById('phase-pills');
+  if(btnExp && btnDet){
+    btnExp.classList.toggle('active', mode === 'express');
+    btnDet.classList.toggle('active', mode === 'detailed');
+  }
+  if(pills){
+    pills.style.display = (mode === 'detailed') ? 'flex' : 'none';
+  }
+  if(currentBias){
+    renderChecklist(currentBias);
+    updateProb();
+  }
+}
+
 function renderChecklist(bias){
-  const container=document.getElementById('checklist-container');
-  const pills=document.getElementById('phase-pills');if(pills)pills.style.display='flex';
-  container.innerHTML=STEPS[bias].map((step, idx)=>`
-    <div class="phase-block" data-phase="${step.step}" style="animation-delay:${idx*0.09}s">
-      <div class="card">
-        <div class="phase-card-header" onclick="togglePhaseCollapse(this)">
-          <span class="phase-badge-pill">${step.step}</span>
-          <div class="card-label" style="font-weight:600;font-size:14px;">${step.label}</div>
-          <span style="font-size:11px;color:var(--text-muted);" id="phase-count-${step.step.replace(' ','')}">0/${step.items.length}</span>
-          <svg class="progress-ring" viewBox="0 0 36 36">
-            <circle class="track" cx="18" cy="18" r="15" stroke-dasharray="94.25" stroke-dashoffset="0"/>
-            <circle class="fill ring-fill-${step.step.replace(' ','')}" cx="18" cy="18" r="15" stroke-dasharray="94.25" stroke-dashoffset="94.25"/>
-          </svg>
-          <span class="phase-chevron">▾</span>
-        </div>
-        <div class="phase-items-wrap">
-          ${step.items.map(item=>`
-            <div class="check-item" data-key="${item.key}" onclick="toggleCheck(this)">
-              <div class="check-box"></div>
-              ${formatChecklistItemHTML(item.text)}
-            </div>`).join('')}
-        </div>
+  const container = document.getElementById('checklist-container');
+  const modeBar = document.getElementById('cockpit-mode-bar');
+  if(modeBar) modeBar.style.display = 'block';
+  const pills = document.getElementById('phase-pills');
+
+  if(checklistMode === 'express'){
+    if(pills) pills.style.display = 'none';
+    const items = (bias === 'buy') ? EXPRESS_BUY : EXPRESS_SELL;
+    container.innerHTML = `
+      <div class="express-checklist-grid">
+        ${items.map((item, idx) => `
+          <div class="check-item express-item ${checkStates[item.key] ? 'checked' : ''}" data-key="${item.key}" onclick="toggleCheck(this)" style="animation-delay:${idx*0.04}s">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-header-line">
+                <span class="check-num-badge">CONTRÔLE ${item.num}</span>
+                <span class="check-title-main">${item.title}</span>
+              </div>
+              ${renderLinesHTML(item.desc)}
+            </div>
+          </div>
+        `).join('')}
       </div>
-    </div>`).join('');
-  updateStepRings();
+    `;
+  } else {
+    if(pills) pills.style.display = 'flex';
+    container.innerHTML = STEPS[bias].map((step, idx) => `
+      <div class="phase-block" data-phase="${step.step}" style="animation-delay:${idx*0.09}s">
+        <div class="card">
+          <div class="phase-card-header" onclick="togglePhaseCollapse(this)">
+            <span class="phase-badge-pill">${step.step}</span>
+            <div class="card-label" style="font-weight:600;font-size:14px;">${step.label}</div>
+            <span style="font-size:11px;color:var(--text-muted);" id="phase-count-${step.step.replace(' ','')}">0/${step.items.length}</span>
+            <svg class="progress-ring" viewBox="0 0 36 36">
+              <circle class="track" cx="18" cy="18" r="15" stroke-dasharray="94.25" stroke-dashoffset="0"/>
+              <circle class="fill ring-fill-${step.step.replace(' ','')}" cx="18" cy="18" r="15" stroke-dasharray="94.25" stroke-dashoffset="94.25"/>
+            </svg>
+            <span class="phase-chevron">▾</span>
+          </div>
+          <div class="phase-items-wrap">
+            ${step.items.map(item => `
+              <div class="check-item ${checkStates[item.key] ? 'checked' : ''}" data-key="${item.key}" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                ${formatChecklistItemHTML(item.text)}
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>`).join('');
+    updateStepRings();
+  }
 }
 
 function togglePhaseCollapse(headerEl){
@@ -465,35 +538,82 @@ function toggleZenFocus(){
 }
 
 function toggleCheck(el){
-  const key=el.dataset.key;
-  checkStates[key]?delete checkStates[key]:(checkStates[key]=true);
+  const key = el.dataset.key;
+  checkStates[key] ? delete checkStates[key] : (checkStates[key] = true);
   el.classList.toggle('checked');
-  updateProb();updateStepRings();
+  updateProb();
+  updateStepRings();
   saveSessionState();
 }
+
 function toggleMacro(el){
   el.classList.toggle('checked');
   saveSessionState();
 }
 
 function updateProb(){
-  if(!currentBias)return;
-  const allItems=STEPS[currentBias].flatMap(s=>s.items);
-  const total=allItems.length;
-  const checked=allItems.filter(i=>checkStates[i.key]).length;
-  const pct=total?Math.round((checked/total)*100):0;
-  document.getElementById('prob-fill').style.width=pct+'%';
-  document.getElementById('prob-pct').textContent=pct+'%';
-  document.getElementById('prob-checked').textContent=`${checked} / ${total} critères`;
-  const verdict=document.getElementById('verdict');
-  const icon=document.getElementById('verdict-icon');
-  const title=document.getElementById('verdict-title');
-  const body=document.getElementById('verdict-body');
-  const label=document.getElementById('prob-verdict-label');
-  verdict.className='verdict show';
-  if(pct>=85){verdict.classList.add('go');icon.textContent='🟢';title.textContent='SETUP VALIDE — EXECUTION AUTORISÉE';body.textContent='Toutes les conditions critiques sont alignées. Le setup est à haute probabilité. Respect strict du risk management.';label.textContent='Haute probabilité';}
-  else if(pct>=65){verdict.classList.add('caution');icon.textContent='🟡';title.textContent='ATTENTION — PRUDENCE REQUISE';body.textContent='Plusieurs critères manquent. Revalidez la structure macro et le timing de killzone avant d\'entrer.';label.textContent='Probabilité moyenne';}
-  else{verdict.classList.add('wait');icon.textContent='🔴';title.textContent='NO SETUP — PRÉSERVEZ VOTRE CAPITAL';body.textContent='Conditions insuffisantes. Conformément à la règle d\'or ICT : attendez ou passez à la session suivante.';label.textContent='Probabilité faible';}
+  if(!currentBias){
+    document.getElementById('prob-pct').textContent = '0%';
+    document.getElementById('prob-fill').style.width = '0%';
+    document.getElementById('prob-checked').textContent = '0 / 0 critères';
+    document.getElementById('prob-verdict-label').textContent = 'Sélectionnez un biais';
+    const v = document.getElementById('verdict');
+    if(v) v.className = 'verdict';
+    return;
+  }
+
+  let total, checked;
+  if(checklistMode === 'express'){
+    total = 10;
+    const items = (currentBias === 'buy') ? EXPRESS_BUY : EXPRESS_SELL;
+    checked = items.filter(i => checkStates[i.key]).length;
+  } else {
+    const allItems = STEPS[currentBias].flatMap(s => s.items);
+    total = allItems.length;
+    checked = allItems.filter(i => checkStates[i.key]).length;
+  }
+
+  const pct = total ? Math.round((checked / total) * 100) : 0;
+  document.getElementById('prob-fill').style.width = pct + '%';
+  document.getElementById('prob-pct').textContent = pct + '%';
+  document.getElementById('prob-checked').textContent = `${checked} / ${total} critères validés`;
+
+  const verdict = document.getElementById('verdict');
+  const icon = document.getElementById('verdict-icon');
+  const title = document.getElementById('verdict-title');
+  const body = document.getElementById('verdict-body');
+  const label = document.getElementById('prob-verdict-label');
+  verdict.className = 'verdict show';
+
+  const abstCount = document.querySelectorAll('.abst-item.triggered').length;
+  if(abstCount > 0){
+    verdict.classList.add('wait');
+    icon.textContent = '🛑';
+    title.textContent = 'ABSTENTION STRICTE — FEU ROUGE ACTIF';
+    body.innerHTML = `<strong>Règle d'or v8 :</strong> « Day trading is not everyday trading ». Vous avez <strong>${abstCount} signal(aux) d'abstention</strong> actif(s). Restez hors marché ou basculez en mode Scalp strict.`;
+    label.textContent = '⛔ Feu rouge d\'abstention';
+    return;
+  }
+
+  if(pct >= 80){
+    verdict.classList.add('go');
+    icon.textContent = '🎯';
+    title.textContent = `FEU VERT ICT 2017 — ${currentBias.toUpperCase()} PROGRAM`;
+    body.textContent = `Haute probabilité (${checked}/${total} critères validés). Risque max 1 % (ou 0.5 % Scalp). Exécution stricte sur Discount/Premium Array.`;
+    label.textContent = 'Haute probabilité (Feu vert)';
+  } else if(pct >= 50){
+    verdict.classList.add('caution');
+    icon.textContent = '⚠️';
+    title.textContent = 'SETUP INCOMPLET — PRUDENCE EXTRÊME';
+    body.textContent = `Plusieurs confluences manquent (${checked}/${total}). Réduisez votre risque de 50 % ou attendez la confirmation SMT / MSS sur M5.`;
+    label.textContent = 'Probabilité moyenne';
+  } else {
+    verdict.classList.add('wait');
+    icon.textContent = '⏳';
+    title.textContent = 'NO SETUP — PRÉSERVEZ VOTRE CAPITAL';
+    body.textContent = `Critères insuffisants (${checked}/${total}). Laissez le marché balayer la liquidité et former la manipulation avant d'entrer.`;
+    label.textContent = 'Probabilité faible (No setup)';
+  }
 }
 
 function updateStepRings(){
@@ -514,6 +634,120 @@ function updateStepRings(){
       cntEl.style.fontWeight = checked===total ? '700' : '500';
     }
   });
+}
+
+// ══ COCKPIT CALCULATOR (EXÉCUTION DIRECTE EN SÉANCE) ══
+function applyCockpitSLPreset(){
+  const preset = document.getElementById('cp-sl-preset').value;
+  const slInput = document.getElementById('cp-sl');
+  const adrInput = document.getElementById('calc-adr-pips');
+  const adrVal = adrInput ? (parseFloat(adrInput.value) || 85) : 85;
+
+  if(!preset || !slInput) return;
+  if(preset === '30' || preset === '40' || preset === '10'){
+    slInput.value = preset;
+  } else if(preset === '30_ts'){
+    slInput.value = '30';
+  } else if(preset === '50_adr'){
+    slInput.value = Math.round(adrVal * 0.5);
+  } else if(preset === '100_adr'){
+    slInput.value = Math.round(adrVal);
+  }
+  calcCockpitRisk();
+}
+
+function calcCockpitRisk(){
+  const capInput = document.getElementById('cp-capital');
+  if(!capInput) return;
+  const capital = parseFloat(capInput.value) || 0;
+  if(capital > 0) {
+    localStorage.setItem('mw-capital', capital);
+    const mainCapInput = document.getElementById('calc-capital');
+    if(mainCapInput && mainCapInput.value != capital) mainCapInput.value = capital;
+  }
+
+  const baseFactor = parseFloat(document.getElementById('cp-base-mode')?.value || '0.3');
+  const riskPct = parseFloat(document.getElementById('cp-risk')?.value || '1');
+  const sl = parseFloat(document.getElementById('cp-sl')?.value) || 0;
+  const espace = parseFloat(document.getElementById('cp-espace')?.value) || 0;
+
+  const baseCap = capital * baseFactor;
+  const baseLbl = document.getElementById('cp-res-base-lbl');
+  if(baseLbl) baseLbl.textContent = baseFactor === 0.3 ? `Base 30% : $${baseCap.toFixed(0)}` : `Base 100% : $${baseCap.toFixed(0)}`;
+
+  // Alerte Espace Intraday
+  const alertEl = document.getElementById('cp-mode-alert');
+  if(espace > 0 && alertEl){
+    alertEl.style.display = 'block';
+    if(espace >= 50){
+      alertEl.style.background = 'rgba(46,204,113,0.12)';
+      alertEl.style.border = '1px solid rgba(46,204,113,0.35)';
+      alertEl.style.color = 'var(--buy)';
+      alertEl.textContent = `✅ DAYTRADE OPTIMAL — ${espace} pips d'espace libre (≥ 50–60 pips).`;
+    } else if(espace >= 40){
+      alertEl.style.background = 'var(--gold-glow)';
+      alertEl.style.border = '1px solid var(--gold-border)';
+      alertEl.style.color = 'var(--gold)';
+      alertEl.textContent = `⚠️ LIMITE ABSOLUE — ${espace} pips. Réduire le SL ou basculer en Scalp R:R 1:1.`;
+    } else {
+      alertEl.style.background = 'rgba(231,76,60,0.1)';
+      alertEl.style.border = '1px solid rgba(231,76,60,0.35)';
+      alertEl.style.color = 'var(--sell)';
+      alertEl.textContent = `⚡ SCALP EXCLUSIF — ${espace} pips disponibles (< 40 pips). Objectif rapide 15–30p.`;
+    }
+  } else if(alertEl) {
+    alertEl.style.display = 'none';
+  }
+
+  if(!capital || !sl){
+    document.getElementById('cp-res-lots').textContent = '—';
+    document.getElementById('cp-res-pipval').textContent = '$0.00 / pip';
+    document.getElementById('cp-res-amount').textContent = '—';
+    document.getElementById('cp-res-tp1').textContent = '—';
+    document.getElementById('cp-res-tp2').textContent = '—';
+    return;
+  }
+
+  const riskAmount = baseCap * (riskPct / 100);
+  const pipValue = riskAmount / sl;
+  const lots = pipValue / 10; // 1 lot standard sur paires USD = 10$/pip
+
+  document.getElementById('cp-res-lots').textContent = `${lots.toFixed(2)} lots`;
+  document.getElementById('cp-res-pipval').textContent = `$${pipValue.toFixed(2)} / pip`;
+  document.getElementById('cp-res-amount').textContent = `$${riskAmount.toFixed(2)}`;
+  document.getElementById('cp-res-tp1').textContent = `+$${riskAmount.toFixed(2)}`;
+  document.getElementById('cp-res-tp2').textContent = `+$${(riskAmount * 3).toFixed(2)}`;
+}
+
+function sendCockpitToJournal(){
+  const slPips = parseFloat(document.getElementById('cp-sl')?.value) || 0;
+  openModal();
+  if(currentBias){
+    document.getElementById('j-bias').value = currentBias;
+  }
+  document.getElementById('j-setup').value = 'yes';
+  const lots = document.getElementById('cp-res-lots')?.textContent || '';
+  if(slPips > 0){
+    document.getElementById('j-notes').value = `Plan Cockpit 60s validé (${currentBias ? currentBias.toUpperCase() : 'Biais'} Program). SL: ${slPips} pips. Lot: ${lots}.`;
+  }
+  showToast('Paramètres envoyés dans le Journal 📥');
+}
+
+function initCockpitCalculator(){
+  const savedCap = localStorage.getItem('mw-capital');
+  const cpCapInput = document.getElementById('cp-capital');
+  const calcCapInput = document.getElementById('calc-capital');
+  if(savedCap){
+    if(cpCapInput) cpCapInput.value = savedCap;
+    if(calcCapInput) calcCapInput.value = savedCap;
+  }
+  const btnExp = document.getElementById('btn-mode-express');
+  const btnDet = document.getElementById('btn-mode-detailed');
+  if(btnExp && btnDet){
+    btnExp.classList.toggle('active', checklistMode === 'express');
+    btnDet.classList.toggle('active', checklistMode === 'detailed');
+  }
+  calcCockpitRisk();
 }
 
 // ══ RISK CALCULATOR — Complet avec Mitigation ══

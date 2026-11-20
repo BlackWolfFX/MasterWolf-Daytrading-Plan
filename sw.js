@@ -1,5 +1,5 @@
-// ══ THE MASTERWOLF ICT PLAN — Service Worker v2.0 ══
-const CACHE_NAME = 'mw-ict-plan-v2';
+// ══ THE MASTERWOLF ICT PLAN — Service Worker v3.0 ══
+const CACHE_NAME = 'mw-ict-plan-v3';
 
 // Fichiers à mettre en cache pour le fonctionnement hors ligne
 const ASSETS_TO_CACHE = [

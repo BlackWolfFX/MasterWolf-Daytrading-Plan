@@ -39,13 +39,13 @@
 </div>
 
 <div id="nav">
-  <button class="nav-tab active" data-view="plan">Plan du Jour</button>
-  <button class="nav-tab" data-view="macro">Macro & Rituels</button>
-  <button class="nav-tab" data-view="pdarray">PD Array</button>
-  <button class="nav-tab" data-view="risk">Modèles & Risk</button>
-  <button class="nav-tab" data-view="saison">Saisonnalité</button>
-  <button class="nav-tab" data-view="journal">Journal</button>
-  <button class="nav-tab" data-view="stats">Stats</button>
+  <button class="nav-tab active" data-view="plan">⚡ Cockpit Live</button>
+  <button class="nav-tab" data-view="macro">🧭 Macro & SMT</button>
+  <button class="nav-tab" data-view="pdarray">📐 PD Array Matrix</button>
+  <button class="nav-tab" data-view="risk">🛡️ Modèles & Risk</button>
+  <button class="nav-tab" data-view="saison">🗓️ Saisonnalité & Rituels</button>
+  <button class="nav-tab" data-view="journal">📋 Journal</button>
+  <button class="nav-tab" data-view="stats">📊 Stats</button>
 </div>
 
 <div id="app">
@@ -112,17 +112,24 @@
     </div>
   </div>
 
+  <div class="cockpit-mode-bar" id="cockpit-mode-bar" style="display:none;margin-bottom:16px;">
+    <div class="cockpit-mode-tabs">
+      <button class="cockpit-mode-btn active" id="btn-mode-express" onclick="setChecklistMode('express')">⚡ Fiche Express 60s (En Séance)</button>
+      <button class="cockpit-mode-btn" id="btn-mode-detailed" onclick="setChecklistMode('detailed')">📋 Pré-Session Détaillée (5 Phases)</button>
+    </div>
+  </div>
+
   <div class="zen-toolbar" id="phase-pills" style="display:none;">
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          <button class="phase-pill active" onclick="filterPhase(this,'ALL')">Toutes les Phases (5)</button>
-          <button class="phase-pill" onclick="filterPhase(this,'PHASE A')">A · Macro</button>
-          <button class="phase-pill" onclick="filterPhase(this,'PHASE B')">B · Liquidités</button>
-          <button class="phase-pill" onclick="filterPhase(this,'PHASE C')">C · Killzones</button>
-          <button class="phase-pill" onclick="filterPhase(this,'PHASE D')">D · Signal</button>
-          <button class="phase-pill" onclick="filterPhase(this,'PHASE E')">E · Sortie</button>
-        </div>
-        <button class="focus-toggle-btn" id="btn-zen-focus" onclick="toggleZenFocus()">🧘 Mode Focus (Masquer cochés)</button>
-      </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <button class="phase-pill active" onclick="filterPhase(this,'ALL')">Toutes les Phases (5)</button>
+      <button class="phase-pill" onclick="filterPhase(this,'PHASE A')">A · Macro</button>
+      <button class="phase-pill" onclick="filterPhase(this,'PHASE B')">B · Liquidités</button>
+      <button class="phase-pill" onclick="filterPhase(this,'PHASE C')">C · Killzones</button>
+      <button class="phase-pill" onclick="filterPhase(this,'PHASE D')">D · Signal</button>
+      <button class="phase-pill" onclick="filterPhase(this,'PHASE E')">E · Sortie</button>
+    </div>
+    <button class="focus-toggle-btn" id="btn-zen-focus" onclick="toggleZenFocus()">🧘 Mode Focus (Masquer cochés)</button>
+  </div>
 
   <div id="checklist-container">
     <div style="text-align:center;padding:40px;color:var(--text-dim);font-size:13px;">↑ Sélectionnez Buy ou Sell pour afficher la checklist</div>
@@ -134,6 +141,81 @@
       <div class="verdict-title" id="verdict-title"></div>
       <div id="verdict-body"></div>
     </div>
+  </div>
+
+  <!-- ══ CALCULATEUR COCKPIT DIRECT (Formule ICT Mois 5) ══ -->
+  <div class="section-title">⚡ Calculateur de Position & Risque (Exécution Immédiate)</div>
+  <div class="card cockpit-calc-box">
+    <div class="grid-3">
+      <div class="input-group">
+        <label class="input-label">Capital Total ($)</label>
+        <input type="number" class="input-field" id="cp-capital" placeholder="10 000" oninput="calcCockpitRisk()">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Base de Calcul</label>
+        <select class="input-field" id="cp-base-mode" onchange="calcCockpitRisk()">
+          <option value="0.3">30 % Conservateur (Mois 5 · 70% intouchables)</option>
+          <option value="1">100 % Capital Total</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Mode / Risque</label>
+        <select class="input-field" id="cp-risk" onchange="calcCockpitRisk()">
+          <option value="1">1 % — Daytrade Recommandé</option>
+          <option value="0.5">0.5 % — Scalp Strict</option>
+          <option value="1.5">1.5 % — Plafond Max Daytrade</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:4px;">
+      <div class="input-group">
+        <label class="input-label">Preset Stop Loss (6 Cas v8)</label>
+        <select class="input-field" id="cp-sl-preset" onchange="applyCockpitSLPreset()">
+          <option value="">— Manuel —</option>
+          <option value="30">30 pips — CBDR + PD Array / Stops</option>
+          <option value="40">40 pips — Raid Asian Range</option>
+          <option value="10">10 pips — Extrême du Jour / LC Rev</option>
+          <option value="30_ts">30 pips — 2e retour Turtle Soup (Mois 8)</option>
+          <option value="50_adr">50 % ADR 5j — Défaut Asian H/L</option>
+          <option value="100_adr">100 % ADR 5j — Entrée 00:00 GMT</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Stop Loss (pips)</label>
+        <input type="number" class="input-field" id="cp-sl" placeholder="ex. 30" oninput="calcCockpitRisk()">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Espace Libre Cible (pips)</label>
+        <input type="number" class="input-field" id="cp-espace" placeholder="≥ 50–60p" oninput="calcCockpitRisk()">
+      </div>
+    </div>
+
+    <div id="cp-mode-alert" style="display:none;margin:10px 0;padding:9px 14px;border-radius:var(--radius);font-size:12px;font-weight:600;"></div>
+
+    <div class="cockpit-res-grid">
+      <div class="cockpit-res-card highlight">
+        <div class="cp-res-lbl">Taille de Lot Standard</div>
+        <div class="cp-res-val gold" id="cp-res-lots">—</div>
+        <div class="cp-res-sub" id="cp-res-pipval">$0.00 / pip</div>
+      </div>
+      <div class="cockpit-res-card">
+        <div class="cp-res-lbl">Capital Risqué ($)</div>
+        <div class="cp-res-val" id="cp-res-amount">—</div>
+        <div class="cp-res-sub" id="cp-res-base-lbl">Base 30% : —</div>
+      </div>
+      <div class="cockpit-res-card">
+        <div class="cp-res-lbl">Objectif TP1 (R:R 1:1)</div>
+        <div class="cp-res-val buy" id="cp-res-tp1">—</div>
+        <div class="cp-res-sub">Sécurisation rapide</div>
+      </div>
+      <div class="cockpit-res-card">
+        <div class="cp-res-lbl">Objectif TP2 (R:R 3:1)</div>
+        <div class="cp-res-val buy" id="cp-res-tp2">—</div>
+        <div class="cp-res-sub">Ratio standard ICT</div>
+      </div>
+    </div>
+
+    <button class="btn-save" style="margin-top:14px;" onclick="sendCockpitToJournal()">📥 Transférer ce Setup dans le Journal</button>
   </div>
 
   <button class="btn-reset" id="btn-reset-plan" onclick="resetPlan()">↺ Réinitialiser la session</button>
