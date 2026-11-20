@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>THE MASTERWOLF ICT PLAN</title>
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+<link rel="shortcut icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<div id="header">
+  <div class="logo">
+    <img src="assets/logo.png" alt="Logo The Masterwolf" class="site-brand-logo">
+    <div class="logo-title-group">THE MASTERWOLF <span>ICT PLAN</span></div>
+  </div>
+  <div class="header-actions">
+    <div class="date-badge" id="date-display">—</div>
+    <div class="kz-badge inactive" id="kz-header-badge">
+      <span class="kz-dot"></span>
+      <span id="kz-header-text">Hors KZ</span>
+    </div>
+    <button class="btn-icon" id="theme-toggle" title="Thème">◐</button>
+    <button class="btn-icon" id="btn-add-entry" title="Enregistrer session">+</button>
+  </div>
+</div>
+
+<div id="nav">
+  <button class="nav-tab active" data-view="plan">Plan du Jour</button>
+  <button class="nav-tab" data-view="macro">Macro & Rituels</button>
+  <button class="nav-tab" data-view="pdarray">PD Array</button>
+  <button class="nav-tab" data-view="risk">Modèles & Risk</button>
+  <button class="nav-tab" data-view="saison">Saisonnalité</button>
+  <button class="nav-tab" data-view="journal">Journal</button>
+  <button class="nav-tab" data-view="stats">Stats</button>
+</div>
+
+<div id="app">
+
+<!-- ══ PLAN DU JOUR ══ -->
+<div class="view active" id="view-plan">
+<div class="rule-banner">
+    <p><strong>RÈGLE D'OR ICT</strong> — « Day trading is not everyday trading — No Setup, No Trade. » Dès qu'un feu rouge d'abstention s'allume ou que l'espace libre passe sous 50–60 pips, passez en mode Scalp ou fermez la plateforme.</p>
+  </div>
+
+  <!-- Killzone panel -->
+  <div class="kz-panel" id="kz-panel">
+    <div class="kz-info">
+      <div class="kz-name off" id="kz-name">Hors Killzone</div>
+      <div class="kz-status" id="kz-status">Prochaine killzone dans <span id="kz-next-in">—</span></div>
+      <div class="kz-slots">
+        <div class="kz-slot off" id="slot-asia">Asia / 00h GMT 18:00–21:00 NY</div>
+        <div class="kz-slot london" id="slot-london">London 01:00–05:00 NY (Sweet 02h–04h)</div>
+        <div class="kz-slot ny" id="slot-ny">New York 07:00–10:00 NY (08:20 CME)</div>
+        <div class="kz-slot lc" id="slot-lc">London Close 10:00–12:00 NY (Rev. 10h30–13h)</div>
+      </div>
+    </div>
+    <div class="kz-countdown" id="kz-countdown">--:--:--</div>
+  </div>
+
+  <div id="smart-day-banner" style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:10px;padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+    <div id="smart-day-text" style="font-size:12px;color:var(--text-muted);line-height:1.55;"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <button class="btn-sm btn-export-entry" onclick="autoSmartPrefill()" title="Coche automatiquement les filtres calendrier/saison valides aujourd'hui">⚡ Auto-Check Contexte</button>
+      <button class="btn-sm btn-export-entry" onclick="copySessionBrief()" title="Copier le résumé complet de la séance">📋 Copier Brief</button>
+    </div>
+  </div>
+
+
+  <!-- FILTRE ÉLIMINATOIRE D'ABSTENTION (Section 3 v8) -->
+  <div class="abstention-box" id="abstention-box">
+    <div class="abstention-header" onclick="toggleAbstentionBody()">
+      <div class="abstention-title">🛑 Filtre Éliminatoire d'Abstention — « Je Ferme les Graphiques Si… »</div>
+      <div class="abstention-status" id="abstention-status">✅ VOIE LIBRE (0 feu rouge)</div>
+    </div>
+    <div id="abstention-body" class="abstention-grid">
+      <div class="abst-item" data-abst="a1" onclick="toggleAbst(this)"><div class="abst-box"></div><div class="abst-text"><strong>NFP / FOMC / Bond Auction</strong> — Vendredi NFP, PM FOMC (14h NY), lendemain whipsaw FOMC, matinée Bond Auction, Bank Holiday US / veille férié ou multiples news Londres.</div></div>
+      <div class="abst-item" data-abst="a2" onclick="toggleAbst(this)"><div class="abst-box"></div><div class="abst-text"><strong>Filtre Londres & Volatilité</strong> — Veille &gt; 2× ADR 5j, 3 clôtures Daily dans mon sens, CBDR &gt; 40–50 pips, Asian &gt; 40 pips non consolidé, ou London Sloppiness (20h NY).</div></div>
+      <div class="abst-item" data-abst="a3" onclick="toggleAbst(this)"><div class="abst-box"></div><div class="abst-text"><strong>Horaires NY & ADR</strong> — Londres a déjà consommé ≥ 80 % de l'ADR 5j, London Lunch (05h–07h NY), passé 12h00 NY hors KZ, ou LC Reversal sans &gt; 125–133 % ADR 5j.</div></div>
+      <div class="abst-item" data-abst="a4" onclick="toggleAbst(this)"><div class="abst-box"></div><div class="abst-text"><strong>Structure, Saisons & Plafond</strong> — Dimanche, vendredi après cible Daily atteinte jeudi, Seek &amp; Destroy juil–août, ZN+DXY in tandem / &lt; 3/4 classes, stagnation M15 ou 2 setups/jour atteints.</div></div>
+    </div>
+  </div>
+
+  <div class="page-title">Biais de Session</div>
+  <div class="bias-selector" id="bias-selector">
+    <button class="bias-btn buy" data-bias="buy"><span class="bias-icon">📈</span><span class="bias-label">Buy Program</span></button>
+    <button class="bias-btn sell" data-bias="sell"><span class="bias-icon">📉</span><span class="bias-label">Sell Program</span></button>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <span style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;">Probabilité Setup</span>
+      <span class="prob-value" id="prob-pct">0%</span>
+    </div>
+    <div class="prob-meter"><div class="prob-fill" id="prob-fill" style="width:0%"></div></div>
+    <div class="prob-label">
+      <span class="prob-text" id="prob-checked">0 / 0 critères</span>
+      <span class="prob-text" id="prob-verdict-label">Sélectionnez un biais</span>
+    </div>
+  </div>
+
+  <div class="zen-toolbar" id="phase-pills" style="display:none;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="phase-pill active" onclick="filterPhase(this,'ALL')">Toutes les Phases (5)</button>
+          <button class="phase-pill" onclick="filterPhase(this,'PHASE A')">A · Macro</button>
+          <button class="phase-pill" onclick="filterPhase(this,'PHASE B')">B · Liquidités</button>
+          <button class="phase-pill" onclick="filterPhase(this,'PHASE C')">C · Killzones</button>
+          <button class="phase-pill" onclick="filterPhase(this,'PHASE D')">D · Signal</button>
+          <button class="phase-pill" onclick="filterPhase(this,'PHASE E')">E · Sortie</button>
+        </div>
+        <button class="focus-toggle-btn" id="btn-zen-focus" onclick="toggleZenFocus()">🧘 Mode Focus (Masquer cochés)</button>
+      </div>
+
+  <div id="checklist-container">
+    <div style="text-align:center;padding:40px;color:var(--text-dim);font-size:13px;">↑ Sélectionnez Buy ou Sell pour afficher la checklist</div>
+  </div>
+
+  <div class="verdict" id="verdict">
+    <div class="verdict-icon" id="verdict-icon"></div>
+    <div class="verdict-text">
+      <div class="verdict-title" id="verdict-title"></div>
+      <div id="verdict-body"></div>
+    </div>
+  </div>
+
+  <button class="btn-reset" id="btn-reset-plan" onclick="resetPlan()">↺ Réinitialiser la session</button>
+</div>
+
+<!-- ══ MACRO & RITUELS ══ -->
+<div class="view" id="view-macro">
+<div class="page-title">Cadre Macro & Intermarché</div>
+
+  <!-- SYNTHÈSE AUTOMATIQUE -->
+  <div id="macro-synthese" style="margin-bottom:20px;"></div>
+
+  <!-- COLONNES BUY / SELL -->
+  <div class="macro-cols">
+    <!-- COL BUY -->
+    <div class="macro-col buy-col">
+      <div class="macro-col-header buy">📈 Buy Program</div>
+      <div class="macro-col-body">
+        <div class="check-item" data-macro="mb-regime" data-side="buy" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>Régime favorable</strong> — Risk-On / Inflation : ZN monte · DXY baisse</div></div>
+        <div class="check-item" data-macro="mb-dxy" data-side="buy" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>DXY en Sell Program</strong> depuis un Premium PD Array HTF</div></div>
+        <div class="check-item" data-macro="mb-bond" data-side="buy" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>ZN/ZB haussiers</strong> — Rendements US10Y en baisse</div></div>
+        <div class="check-item" data-macro="mb-cot" data-side="buy" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>COT Commercials &gt; 50%</strong> — Buy Program actif</div></div>
+        <div class="check-item" data-macro="mb-smt" data-side="buy" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>SMT haussière</strong> — DXY Lower High + GBP Higher Low</div></div>
+        <div class="check-item" data-macro="mb-ipda" data-side="buy" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>IPDA</strong> — Prix sur Discount PD Array · BSL ciblés</div></div>
+        <div class="check-item" data-macro="mb-saison" data-side="buy" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>Saisonnalité</strong> — Fenêtre haussière active sur GBP/USD</div></div>
+      </div>
+    </div>
+    <!-- COL SELL -->
+    <div class="macro-col sell-col">
+      <div class="macro-col-header sell">📉 Sell Program</div>
+      <div class="macro-col-body">
+        <div class="check-item" data-macro="ms-regime" data-side="sell" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>Régime favorable</strong> — Risk-Off / Déflation : ZN baisse · DXY monte</div></div>
+        <div class="check-item" data-macro="ms-dxy" data-side="sell" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>DXY en Buy Program</strong> depuis un Discount PD Array HTF</div></div>
+        <div class="check-item" data-macro="ms-bond" data-side="sell" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>ZN/ZB baissiers</strong> — Rendements US10Y en hausse</div></div>
+        <div class="check-item" data-macro="ms-cot" data-side="sell" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>COT Commercials &lt; 50%</strong> — Sell Program actif</div></div>
+        <div class="check-item" data-macro="ms-smt" data-side="sell" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>SMT baissière</strong> — DXY Higher High + GBP Lower High</div></div>
+        <div class="check-item" data-macro="ms-ipda" data-side="sell" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>IPDA</strong> — Prix sur Premium PD Array · SSL ciblés</div></div>
+        <div class="check-item" data-macro="ms-saison" data-side="sell" onclick="toggleMacro(this);updateMacroSynthese()"><div class="check-box"></div><div class="check-text"><strong>Saisonnalité</strong> — Fenêtre baissière active sur GBP/USD</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SMT -->
+  <div class="section-title">Protocole DXY & Divergences SMT</div>
+  <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">DXY et EUR/USD·GBP/USD évoluent en <strong style="color:var(--text);">miroir inverse</strong>. Toute cassure de symétrie sur un PD Array HTF = intervention institutionnelle.</div>
+
+  <div class="card" style="margin-bottom:8px;">
+    <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--buy);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">📈 SMT Haussière — Buy Program</div>
+    <div style="font-size:12px;color:var(--text-muted);line-height:1.75;">
+      <div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bg-elevated);">
+        <strong style="color:var(--text);">Cas 1 —</strong> Le DXY imprime un <span style="color:var(--sell);">Higher High</span> pendant que EUR/USD ou GBP/USD <strong>refuse de faire un Lower Low</strong> → <span style="color:var(--buy);">Higher Low sur le Cable</span> = force acheteuse relative cachée.
+      </div>
+      <div>
+        <strong style="color:var(--text);">Cas 2 —</strong> EUR/USD ou GBP/USD balaie un plus bas (<span style="color:var(--sell);">Lower Low · Turtle Soup</span>) pendant que le DXY <strong>échoue à faire un Higher High</strong> → <span style="color:var(--buy);">Lower High sur DXY</span> = accumulation institutionnelle.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:8px;">
+    <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--sell);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">📉 SMT Baissière — Sell Program</div>
+    <div style="font-size:12px;color:var(--text-muted);line-height:1.75;">
+      <div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bg-elevated);">
+        <strong style="color:var(--text);">Cas 1 —</strong> Le DXY <strong>échoue à faire un Lower Low</strong> (<span style="color:var(--buy);">Higher Low sur DXY</span> = soutien caché du Dollar) pendant que EUR/USD ou GBP/USD imprime un <span style="color:var(--sell);">Higher High</span> = distribution vendeuse.
+      </div>
+      <div>
+        <strong style="color:var(--text);">Cas 2 —</strong> Le DXY balaie un plus bas (<span style="color:var(--buy);">Lower Low</span>) pendant que GBP/USD <strong>refuse de monter</strong> → <span style="color:var(--sell);">Lower High sur GBP/USD</span> = faiblesse sous-jacente.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">⚖️ SMT entre Paires Corrélées — EUR/USD vs GBP/USD</div>
+    <div style="font-size:12px;color:var(--text-muted);line-height:1.75;">
+      <div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bg-elevated);">
+        <strong style="color:var(--buy);">À l'achat</strong> → Privilégiez la paire qui <strong>refuse de casser un creux</strong> quand l'autre casse (<span style="color:var(--buy);">Higher Low</span>) — c'est la plus forte.
+      </div>
+      <div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bg-elevated);">
+        <strong style="color:var(--sell);">À la vente</strong> → Privilégiez la paire qui <strong>refuse de casser un sommet</strong> quand l'autre casse (<span style="color:var(--sell);">Lower High</span>) — c'est la plus faible.
+      </div>
+      <div>💡 Vérifiez <strong style="color:var(--text);">EUR/GBP</strong> pour confirmer le leadership de la Livre sterling.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;border-left:3px solid var(--gold);">
+    <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">🏛️ 4e Confirmation SMT — Triade Obligataire 5Y / 10Y / 30Y (08:00 – 08:30 NY)</div>
+    <div style="font-size:12px;color:var(--text-muted);line-height:1.75;">
+      Les mouvements nocturnes des obligations US ne sont pas fiables pour Londres. Pour New York, comparez <strong style="color:var(--text);">ZF (5Y), ZN (10Y) et ZB (30Y)</strong> sur H2 ou M15 entre <strong style="color:var(--gold);">08:00 et 08:30 NY</strong> :<br>
+      • <span style="color:var(--buy);font-weight:600;">Buy GBP/USD :</span> une maturité casse un creux sur un Discount Array tandis qu'une autre refuse de faire un plus bas (Higher Low).<br>
+      • <span style="color:var(--sell);font-weight:600;">Sell GBP/USD :</span> une maturité casse un sommet sur un Premium Array tandis qu'une autre forme un Lower High.
+    </div>
+  </div>
+
+  <!-- IPDA -->
+  <div class="section-title">Cycle IPDA & Valuation</div>
+  <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">L'IPDA respecte une séquence <strong style="color:var(--text);">immuable</strong> — l'algorithme ne passe jamais directement de Consolidation à Retracement.</div>
+
+  <!-- Cycle 4 états -->
+  <div class="card" style="margin-bottom:8px;">
+    <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;">🔄 Cycle des 4 États IPDA</div>
+    <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;margin-bottom:14px;">
+      <div style="text-align:center;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;min-width:100px;">
+        <div style="font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Consolidation</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:3px;">Equilibrium</div>
+      </div>
+      <div style="color:var(--gold);font-size:16px;padding:0 6px;">→</div>
+      <div style="text-align:center;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;min-width:100px;">
+        <div style="font-size:10px;font-weight:700;color:var(--buy);text-transform:uppercase;letter-spacing:0.08em;">Expansion</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:3px;">Order Blocks</div>
+      </div>
+      <div style="color:var(--gold);font-size:16px;padding:0 6px;">→</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div style="text-align:center;padding:8px 14px;background:var(--bg-elevated);border-radius:6px;min-width:120px;">
+          <div style="font-size:10px;font-weight:700;color:#9B59B6;text-transform:uppercase;letter-spacing:0.08em;">Retracement</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">FVG · Voids</div>
+        </div>
+        <div style="text-align:center;padding:8px 14px;background:var(--bg-elevated);border-radius:6px;min-width:120px;">
+          <div style="font-size:10px;font-weight:700;color:var(--sell);text-transform:uppercase;letter-spacing:0.08em;">Reversal</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Liquidity Pools · Stop Runs</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11.5px;color:var(--text-muted);line-height:1.7;padding-top:10px;border-top:1px solid var(--bg-elevated);">
+      <strong style="color:var(--gold);">Règle des 4 bougies :</strong> Après une jambe impulsive, attendre un Swing High/Low sur <strong style="color:var(--text);">3 bougies + 1 bougie amorçant le retournement</strong> (ignorer les dimanches) avant de tracer Fibonacci.<br>
+      → Achats exclusivement <span style="color:var(--buy);">en Discount &lt; 50%</span> (idéal OTE 62–79%) · Ventes exclusivement <span style="color:var(--sell);">en Premium &gt; 50%</span> (idéal OTE 62–79%)<br>
+      → Aucun nouvel achat au-dessus de 80–90% · Aucune nouvelle vente sous 20–30%
+    </div>
+  </div>
+
+  <!-- LRLR / ERL / IRL -->
+  <div class="card" style="margin-bottom:20px;">
+    <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;">🎯 LRLR · ERL · IRL</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div style="background:var(--bg-elevated);border-radius:6px;padding:12px;border-left:3px solid var(--buy);">
+        <div style="font-size:10px;font-weight:700;color:var(--buy);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">LRLR ✅</div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.6;">Mouvement dans le sens de l'Order Flow Monthly/Weekly — les sommets/creux intermédiaires cèdent <strong style="color:var(--text);">sans obstacle majeur.</strong> Privilegier.</div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:6px;padding:12px;border-left:3px solid var(--sell);">
+        <div style="font-size:10px;font-weight:700;color:var(--sell);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">HRLR ⛔</div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.6;">Accumulations de sommets/creux contre-tendance. <strong style="color:var(--text);">Éviter</strong> sauf injections de volatilité majeures (NFP, FOMC).</div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:6px;padding:12px;border-left:3px solid var(--gold);">
+        <div style="font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">ERL ↔ IRL</div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.6;"><strong style="color:var(--text);">Entrée IRL</strong> (OB · FVG · Void) ou après sweep <strong style="color:var(--text);">ERL</strong> (Turtle Soup) pour viser l'ERL opposée (BSL/SSL).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTRIQUES INTRADAY (neutres) -->
+  <div class="section-title">Métriques Intraday</div>
+  <div class="card">
+    <div class="check-item" data-macro="m-cbdr" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>CBDR</strong> (14h–20h NY) &lt; 30 pips — journée directionnelle potentielle</div></div>
+    <div class="check-item" data-macro="m-asian" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>Asian Range</strong> (20h–00h NY) &lt; 20–30 pips — accumulation étroite avant expansion</div></div>
+    <div class="check-item" data-macro="m-sd" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>Déviations Standards</strong> tracées : -2 SD / +2 SD + ADR 5 jours borné</div></div>
+  </div>
+
+  <!-- TABLE RÉGIMES -->
+  <div class="section-title">Référence Régimes Macro — 4 Classes d'Actifs</div>
+  <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">Inflation / Déflation → diagnostic sur Monthly (décalage 6–12 mois) · Risk-On / Risk-Off → vérification Weekly, Daily, H4</div>
+  <div class="card" style="padding:0;overflow:hidden;overflow-x:auto;">
+    <table class="regime-table" style="margin:0;min-width:620px;">
+      <thead>
+        <tr>
+          <th style="min-width:110px;">Régime</th>
+          <th>Obligations<br><span style="font-weight:400;font-size:9px;">ZB 30Y · ZN 10Y · ZF 5Y</span></th>
+          <th>Rendements<br><span style="font-weight:400;font-size:9px;">US30Y · US10Y · US05Y</span></th>
+          <th>Matières 1res<br><span style="font-weight:400;font-size:9px;">CRB · Gold · Oil · Copper</span></th>
+          <th>Actions<br><span style="font-weight:400;font-size:9px;">ES · NQ · YM · Nikkei</span></th>
+          <th>DXY</th>
+          <th style="min-width:120px;">Devises<br><span style="font-weight:400;font-size:9px;">EUR/USD · GBP/USD</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700;font-size:11px;">📈 HAUSSE DES TAUX<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">(Driver Taux)</span></td>
+          <td style="font-size:11px;color:var(--text-muted);">Baissent</td>
+          <td class="arrow-up" style="font-size:11px;">Montent</td>
+          <td style="font-size:11px;color:var(--text-muted);">Sous pression CT via DXY ↑ (Gold) · Pression haussière à 6–12 mois</td>
+          <td class="arrow-dn" style="font-size:11px;">Sous pression · Baissières (lag 6–12 mois)</td>
+          <td class="arrow-up" style="font-size:11px;font-weight:600;">📈 Haussier<br><span style="font-size:9px;font-weight:400;">« Money seeks yield »</span></td>
+          <td><span class="badge-sell">SELL PROGRAM</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;font-size:11px;">📉 BAISSE DES TAUX<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">(Driver Taux)</span></td>
+          <td class="arrow-up" style="font-size:11px;">Montent</td>
+          <td class="arrow-dn" style="font-size:11px;">Baissent</td>
+          <td style="font-size:11px;color:var(--text-muted);">Soutenues CT via DXY ↓ · Pression baissière à 6–12 mois</td>
+          <td class="arrow-up" style="font-size:11px;">Soutien haussier franc (hors rare déflation)</td>
+          <td class="arrow-dn" style="font-size:11px;font-weight:600;">📉 Baissier<br><span style="font-size:9px;font-weight:400;">fuite rendements en baisse</span></td>
+          <td><span class="badge-buy">BUY PROGRAM</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--buy);font-weight:700;font-size:11px;">🔥 INFLATION<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">(Commodities Lead)</span></td>
+          <td class="arrow-dn" style="font-size:11px;">Baissent<br><span style="font-size:9px;color:var(--text-dim);">décalage 6–12 mois</span></td>
+          <td class="arrow-up" style="font-size:11px;">Montent<br><span style="font-size:9px;color:var(--text-dim);">pression matières</span></td>
+          <td class="arrow-up" style="font-size:11px;font-weight:600;">📈 Montent fortement<br><span style="font-size:9px;font-weight:400;">CRB · énergie · métaux · grains</span></td>
+          <td style="font-size:11px;color:var(--text-muted);">Variables · Sous pression si obligations ↓ et taux ↑ durablement</td>
+          <td class="arrow-dn" style="font-size:11px;font-weight:600;">📉 Baissier<br><span style="font-size:9px;font-weight:400;">stimule matières premières</span></td>
+          <td><span class="badge-buy">BUY PROGRAM</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--sell);font-weight:700;font-size:11px;">❄️ DÉFLATION<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">(Cas rare)</span></td>
+          <td class="arrow-up" style="font-size:11px;">Montent très fortement</td>
+          <td class="arrow-dn" style="font-size:11px;">S'effondrent</td>
+          <td class="arrow-dn" style="font-size:11px;">Baissent (majorité des matières premières)</td>
+          <td class="arrow-dn" style="font-size:11px;">Baissent (conjointement avec matières)</td>
+          <td class="arrow-up" style="font-size:11px;font-weight:600;">📈 Haussier / Neutre</td>
+          <td><span class="badge-sell">SELL PROGRAM</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--buy);font-weight:700;font-size:11px;">🟢 RISK-ON<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">(Appétit Risque)</span></td>
+          <td class="arrow-dn" style="font-size:11px;">Baissent<br><span style="font-size:9px;color:var(--text-dim);">désengagement dette sécurisée</span></td>
+          <td class="arrow-up" style="font-size:11px;">Montent</td>
+          <td class="arrow-up" style="font-size:11px;">Montent</td>
+          <td class="arrow-up" style="font-size:11px;font-weight:600;">📈 Montent<br><span style="font-size:9px;font-weight:400;">tendance haussière nette</span></td>
+          <td class="arrow-dn" style="font-size:11px;font-weight:600;">📉 Baissier / Faible</td>
+          <td><span class="badge-buy">BUY PROGRAM</span><br><span style="font-size:9px;color:var(--buy);">AUD · NZD · CAD · EUR · GBP ↑</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--sell);font-weight:700;font-size:11px;">🔴 RISK-OFF<br><span style="font-weight:400;color:var(--text-muted);font-size:10px;">(Aversion Risque)</span></td>
+          <td class="arrow-up" style="font-size:11px;">Montent<br><span style="font-size:9px;color:var(--text-dim);">refuge bons du Trésor</span></td>
+          <td class="arrow-dn" style="font-size:11px;">Baissent</td>
+          <td class="arrow-dn" style="font-size:11px;">Baissent</td>
+          <td class="arrow-dn" style="font-size:11px;font-weight:600;">📉 Baissent<br><span style="font-size:9px;font-weight:400;">ventes massives</span></td>
+          <td class="arrow-up" style="font-size:11px;font-weight:600;">📈 Haussier<br><span style="font-size:9px;font-weight:400;">refuge & liquidité USD</span></td>
+          <td><span class="badge-sell">SELL PROGRAM</span><br><span style="font-size:9px;color:var(--sell);">devises risquées ↓ vs USD</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:11px;color:var(--text-dim);padding:10px 4px;line-height:1.6;">
+    ⚠️ <strong style="color:var(--text-muted);">Note Découplage :</strong> En cas de conflit entre actions/matières et marché obligataire, la Triade (ZB/ZN/ZF) et le DXY priment. Si ZN et DXY évoluent dans le <em>même sens (in tandem)</em> ou si moins de 3 classes sur 4 s'alignent → consolidation · réduire le levier · cibles intraday courtes uniquement.
+  </div>
+
+  <!-- DIAGNOSTIC INTERACTIF MULTI-TIMEFRAME (6 QUESTIONS GUIDÉES) -->
+  <div class="section-title">Diagnostic Macro Interactif — Questionnaire Multi-Timeframe</div>
+  <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:14px;">Réponds aux 6 questions ci-dessous selon tes graphiques (Monthly → H4) : l'algorithme déduit automatiquement le régime exact (<strong style="color:var(--text);">Inflation / Déflation</strong>, <strong style="color:var(--text);">Hausse / Baisse des Taux</strong>, <strong style="color:var(--text);">Risk-On / Risk-Off</strong>) et le programme GBP/USD.</div>
+
+  <div class="card macro-wizard-card" id="macro-wizard">
+    <div class="macro-wizard-header">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span class="phase-badge-pill" id="mw-step-badge">QUESTION 1 / 6</span>
+        <span style="font-size:12px;color:var(--text-muted);" id="mw-progress-label">Analyse des 4 classes d'actifs</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="focus-toggle-btn" id="mw-mode-toggle" onclick="toggleMacroWizardMode()">📋 Voir toutes les questions</button>
+        <button class="focus-toggle-btn" onclick="resetMacroWizard()" title="Réinitialiser le questionnaire">↺ Reset</button>
+      </div>
+    </div>
+
+    <div class="prob-meter" style="margin:14px 0 20px;">
+      <div class="prob-fill" id="mw-progress-fill" style="width:0%;background:var(--gold);"></div>
+    </div>
+
+    <!-- CONTAINER DES QUESTIONS (MODE GUIDÉ OU VUE COMPLÈTE) -->
+    <div id="mw-questions-container"></div>
+
+    <!-- BARRE DE NAVIGATION DU QUESTIONNAIRE GUIDÉ -->
+    <div class="mw-nav-bar" id="mw-nav-bar">
+      <button class="focus-toggle-btn" id="mw-prev-btn" onclick="prevMacroQuestion()" disabled>← Précédent</button>
+      <div class="mw-dots" id="mw-dots"></div>
+      <button class="focus-toggle-btn active" id="mw-next-btn" onclick="nextMacroQuestion()">Suivant →</button>
+    </div>
+
+    <!-- SYNTHÈSE AUTOMATIQUE DÉTAILLÉE -->
+    <div id="mw-verdict-box" style="margin-top:22px;"></div>
+  </div>
+
+<!-- RITUELS PÉRIODIQUES & ORGANISATION DES ÉCRANS (Sections 1 & 2 v8) -->
+  <div class="section-title">Rituels Périodiques & Organisation des Écrans (v8)</div>
+  <div class="ritual-tabs">
+    <button class="ritual-tab active" onclick="switchRitual(this,'rit-mensuel')">📅 1×/Mois (15 min)</button>
+    <button class="ritual-tab" onclick="switchRitual(this,'rit-weekend')">🗓️ Week-end (15 min)</button>
+    <button class="ritual-tab" onclick="switchRitual(this,'rit-ecrans')">🖥️ Organisation 5 Écrans</button>
+    <button class="ritual-tab" onclick="switchRitual(this,'rit-horloge')">⏰ Horloge True Day & Filling</button>
+  </div>
+
+  <div class="ritual-panel active" id="rit-mensuel">
+    <div class="card">
+      <div class="check-item" data-macro="rit-m1" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>1. Inflation vs Déflation (Monthly uniquement · lag 6–12m)</strong> — Comparer CRB / GSCI / GS Industrial Metals face aux obligations ZB 30Y : matières premières ↑ + ZB ↓ = Inflation ; ZB ↑↑ + matières/actions ↓ = Déflation.</div></div>
+      <div class="check-item" data-macro="rit-m2" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>2. 9 à 18 bougies Monthly & Quarterly Shifts</strong> — Identifier tendance vs consolidation (si range confus → anticiper retournement/retracement par rapport aux 3–4 derniers mois) + prochain basculement trimestriel (tous les 3–4 mois).</div></div>
+      <div class="check-item" data-macro="rit-m3" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>3. PD Arrays Monthly & Saisonnalité</strong> — Reporter uniquement les PD Arrays Monthly évidents (9–18m) sur Weekly puis Daily (jamais sur M15/M5). Vérifier fenêtres saisonnières GBP/USD & DXY.</div></div>
+    </div>
+  </div>
+
+  <div class="ritual-panel" id="rit-weekend">
+    <div class="card">
+      <div class="check-item" data-macro="rit-w1" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>1. Calendrier Forex Factory (NY EST)</strong> — Filtrer High/Medium Impact + Bank Holidays USD & GBP + repérer manuellement les Bond Auctions. Marquer en ROUGE les abstentions et en VERT les fenêtres porteuses (1 annonce isolée Londres 01h–05h ou salve US 08h30).</div></div>
+      <div class="check-item" data-macro="rit-w2" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>2. Qualifier Risk-On / Risk-Off (Weekly / Daily / H4)</strong> — Vérifier alignement ≥ 3/4 classes d'actifs et opposition ZN vs DXY. Si ZN + DXY in tandem ou &lt; 3/4 classes → large consolidation → réduire cibles au Scalping.</div></div>
+      <div class="check-item" data-macro="rit-w3" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>3. COT Commercials (12m/6m), Open Interest & Sentiment</strong> — Tracer médiane 12 mois (ou 6m) sur barchart.com (&gt; 50 % = Buy, &lt; 50 % = Sell). Chute OI ≥ 10–15 % sur Discount = Buy ; hausse OI ≥ 10–15 % sur Premium = Sell. Vérifier presse + Williams %R (14 Weekly bornes 80/20 ; 15 Daily seuil 50).</div></div>
+      <div class="check-item" data-macro="rit-w4" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>4. Taux BoE vs FED, Niveaux Weekly & Ouverture Hebdomadaire</strong> — Comparer taux directeurs (investing.com), reporter PD Arrays Weekly sur Daily, et tracer la ligne d'ouverture Dimanche / Lundi 00:00 NY sur H1 jusqu'au jeudi (traversée jeudi = alerte retournement).</div></div>
+    </div>
+  </div>
+
+  <div class="ritual-panel" id="rit-ecrans">
+    <div class="card" style="padding:0;overflow:hidden;overflow-x:auto;">
+      <table class="regime-table" style="margin:0;min-width:600px;">
+        <thead><tr><th>Actif</th><th>Timeframes Exacts</th><th>Ce qu'on trace</th><th>Ce qu'on NE met PAS</th></tr></thead>
+        <tbody>
+          <tr><td><strong>GBP/USD</strong><br><span style="font-size:9px;color:var(--gold);">Paire tradée</span></td><td>Monthly (1×/m) → Weekly → Daily/H4 → H1/M30/M15/M5</td><td>IPDA 20j (Hier=J1), PDH/PDL, 3j H/L, Londres + extrême→pré-NY, NY veille, Dim/Lun 00h NY, CBDR, Asian, Flout, ADR 5j, Williams %R(10) M15.</td><td><strong>Pas de M1</strong> pour décider. Pas de vieux niveaux Monthly sur M15/M5.</td></tr>
+          <tr><td><strong>DXY + EUR/USD</strong><br><span style="font-size:9px;color:var(--text-muted);">+ EUR/GBP</span></td><td>Daily / H4 (+ H1/M15 SMT séance)</td><td>IPDA 20j DXY Daily, PD Arrays Daily/H4, divergences SMT DXY vs GU et EU vs GU, force relative EUR/GBP.</td><td>Pas de CBDR, Flout ni ADR complet.</td></tr>
+          <tr><td><strong>Obligations US</strong><br><span style="font-size:9px;color:var(--text-muted);">ZB · ZN · ZF</span></td><td>Daily / H4 / H2 + M15 (08h00–08h30 NY)</td><td>Compression vs expansion Daily + PD Arrays évidents + <strong>SMT Triade 5Y/10Y/30Y</strong> entre 08:00 et 08:30 NY + ZN vs DXY.</td><td>Pas de revue 18m chaque matin. Pas de CBDR/Asian/Flout (08h–15h NY).</td></tr>
+          <tr><td><strong>Rendements US</strong><br><span style="font-size:9px;color:var(--text-muted);">US10Y/30Y/05Y</span></td><td>Daily / H4 (investing.com)</td><td>Lecture simple du sens (miroir inverse de ZB/ZN) pour valider le DXY (« Money seeks yield »).</td><td><strong>ZÉRO</strong> tracé de PD Array Matrix ou IPDA Range.</td></tr>
+          <tr><td><strong>Actions & Matières</strong><br><span style="font-size:9px;color:var(--text-muted);">ES/NQ, CRB, Gold</span></td><td>Monthly (1×/m) + Weekly/Daily/H4</td><td>1×/mois : CRB/GSCI vs ZB (Inflation/Déflation). Semaine : Risk-On/Off & cohérence inverse DXY.</td><td>Aucun tracé intraday Forex.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ritual-panel" id="rit-horloge">
+    <div class="clock-grid">
+      <div class="clock-card"><div class="clock-time">20:00 NY (00:00 GMT) · KZ 18h–21h</div><div class="clock-name">Ouverture GMT & Asie</div><div class="clock-desc">Clôture du CBDR. Permet une entrée sans réveil Londres (setup HTF ou daytrade unique si la veille a réagi sur PD Array Daily) : ordre à 00:00 GMT ou ±10–20 pips (ou fractionné 50 %/50 %), SL = 100 % ADR 5j.</div></div>
+      <div class="clock-card"><div class="clock-time">14:00 – 20:00 NY</div><div class="clock-name">CBDR (Central Bank Dealers Range)</div><div class="clock-desc">Priorité aux corps. Seuil bloquant : &lt; 40 pips (idéal 20–30 pips). Au-delà de 40 pips projections inutilisables ; 50+ pips = éviter Londres sauf reconsolidation Asie.</div></div>
+      <div class="clock-card"><div class="clock-time">20:00 – 00:00 NY</div><div class="clock-name">Asian Range & Garde-fou Mois 12</div><div class="clock-desc">Standard 20–30 pips (≤ 20 pips pré-Francfort). Raid cible ≥ 5 pips au-delà (spread inclus). <strong>Garde-fou Mois 12 :</strong> ne jamais acheter au-dessus de l'Asian High ni vendre sous l'Asian Low.</div></div>
+      <div class="clock-card"><div class="clock-time">15:00 – 00:00 NY</div><div class="clock-name">Flout & Filling the Numbers</div><div class="clock-desc">1 SD = 50 % du range 15h–00h. Vente impérative au-dessus de 50 %, achat en dessous. IPDA remplit 4 niveaux/jour (4 Pivots, 4 SD CBDR, 4 Asian ou 4 demi-Flout).</div></div>
+      <div class="clock-card"><div class="clock-time">00:00 NY → 01:00–05:00 NY</div><div class="clock-name">Midnight Open & London KZ</div><div class="clock-desc">Normal Protraction (sous/sur 00:00 NY) ou Delayed Protraction (1er retracement à 02:00 NY). Forme 40–60 % du range (1–2 SD CBDR, max 3–4 SD). Partiel avant 05:00 NY.</div></div>
+      <div class="clock-card"><div class="clock-time">07:00–10:00 NY · LC 10h–12h · 15h NY</div><div class="clock-name">NY Open, London Close & True Day</div><div class="clock-desc">Pivots 08:20 CME & 08:30 news. LC Reversal (10h30–13h) si range &gt; 125–133 % ADR 5j. 60–80 % sécurisé 10–15 pips avant ADR (80 % si avant 10h NY). True Day Close = 15:00 NY.</div></div>
+    </div>
+  </div>
+
+<!-- ══ RISK ══ -->
+</div>
+
+<!-- ══ PD ARRAY MATRIX ══ -->
+<div class="view" id="view-pdarray">
+<div class="page-title">PD Array Matrix — Daytrader ICT</div>
+
+  <div class="rule-banner" style="margin-bottom:20px;">
+    <p><strong>PRINCIPE FONDAMENTAL</strong> — « Un rebond sur un Discount Array → Buy Program visant un Premium Array. Un rejet sur un Premium Array → Sell Program visant un Discount Array. »</p>
+  </div>
+
+  <!-- MATRICE VISUELLE -->
+  <div class="pda-matrix" id="pda-matrix">
+    <div class="pda-zone-label premium">▲ Premium — Zone de Vente (au-dessus de l'Équilibre)</div>
+    <div class="pda-list-prem">
+      <div class="pda-item prem" data-id="old-high" onclick="showPDA(this,'old-high','prem')"><span class="pda-num">7</span><span class="pda-name">Old High / Old Low</span><span class="pda-badge b-old">HTF</span><span class="pda-badge b-limit">Limit</span></div>
+      <div class="pda-item prem" data-id="rej-prem" onclick="showPDA(this,'rej-prem','prem')"><span class="pda-num">6</span><span class="pda-name">Rejection Block</span><span class="pda-badge b-rej">Mèches</span><span class="pda-badge b-limit">Limit</span></div>
+      <div class="pda-item prem" data-id="ob-bear" onclick="showPDA(this,'ob-bear','prem')"><span class="pda-num">5</span><span class="pda-name">Bearish Order Block</span><span class="pda-badge b-ob">OB</span><span class="pda-badge b-limit">Limit</span></div>
+      <div class="pda-item prem" data-id="fvg-bear" onclick="showPDA(this,'fvg-bear','prem')"><span class="pda-num">4</span><span class="pda-name">Bearish Fair Value Gap</span><span class="pda-badge b-fvg">FVG</span><span class="pda-badge b-stop">Stop</span></div>
+      <div class="pda-item prem" data-id="void-bear" onclick="showPDA(this,'void-bear','prem')"><span class="pda-num">3</span><span class="pda-name">Liquidity Void</span><span class="pda-badge b-liq">Void</span><span class="pda-badge b-stop">Stop</span></div>
+      <div class="pda-item prem" data-id="brk-bear" onclick="showPDA(this,'brk-bear','prem')"><span class="pda-num">2</span><span class="pda-name">Bearish Breaker</span><span class="pda-badge b-brk">Breaker</span><span class="pda-badge b-stop">Stop</span></div>
+      <div class="pda-item prem" data-id="mit-bear" onclick="showPDA(this,'mit-bear','prem')"><span class="pda-num">1</span><span class="pda-name">Bearish Mitigation Block</span><span class="pda-badge b-mit">Mit.</span><span class="pda-badge b-stop">Stop</span></div>
+    </div>
+    <div class="pda-equilibrium">
+      <span class="pda-eq-label">— EQUILIBRIUM 50% —</span>
+      <span class="pda-eq-sub">Frontière Premium / Discount · Pas de nouvel achat au-dessus de 80–90%</span>
+    </div>
+    <div class="pda-list-disc">
+      <div class="pda-item disc" data-id="mit-bull" onclick="showPDA(this,'mit-bull','disc')"><span class="pda-num">1</span><span class="pda-name">Bullish Mitigation Block</span><span class="pda-badge b-mit">Mit.</span><span class="pda-badge b-stop">Stop</span></div>
+      <div class="pda-item disc" data-id="brk-bull" onclick="showPDA(this,'brk-bull','disc')"><span class="pda-num">2</span><span class="pda-name">Bullish Breaker</span><span class="pda-badge b-brk">Breaker</span><span class="pda-badge b-stop">Stop</span></div>
+      <div class="pda-item disc" data-id="void-bull" onclick="showPDA(this,'void-bull','disc')"><span class="pda-num">3</span><span class="pda-name">Liquidity Void</span><span class="pda-badge b-liq">Void</span><span class="pda-badge b-stop">Stop</span></div>
+      <div class="pda-item disc" data-id="fvg-bull" onclick="showPDA(this,'fvg-bull','disc')"><span class="pda-num">4</span><span class="pda-name">Bullish Fair Value Gap</span><span class="pda-badge b-fvg">FVG</span><span class="pda-badge b-stop">Stop</span></div>
+      <div class="pda-item disc" data-id="ob-bull" onclick="showPDA(this,'ob-bull','disc')"><span class="pda-num">5</span><span class="pda-name">Bullish Order Block</span><span class="pda-badge b-ob">OB</span><span class="pda-badge b-limit">Limit</span></div>
+      <div class="pda-item disc" data-id="rej-disc" onclick="showPDA(this,'rej-disc','disc')"><span class="pda-num">6</span><span class="pda-name">Rejection Block</span><span class="pda-badge b-rej">Mèches</span><span class="pda-badge b-limit">Limit</span></div>
+      <div class="pda-item disc" data-id="old-low" onclick="showPDA(this,'old-low','disc')"><span class="pda-num">7</span><span class="pda-name">Old Low / Old High</span><span class="pda-badge b-old">HTF</span><span class="pda-badge b-limit">Limit</span></div>
+    </div>
+    <div class="pda-zone-label discount">▼ Discount — Zone d'Achat (en dessous de l'Équilibre)</div>
+  </div>
+
+  <!-- DETAIL PANEL (s'affiche au clic) -->
+  <div class="pda-detail" id="pda-detail">
+    <div class="pda-detail-header">
+      <div>
+        <div class="pda-detail-name" id="pda-detail-name">—</div>
+        <div class="pda-detail-zone" id="pda-detail-zone">—</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:6px;" id="pda-detail-badges"></div>
+    </div>
+    <div class="pda-detail-body" id="pda-detail-body"></div>
+  </div>
+
+  <!-- RÈGLES PRIORITÉ INTRADAY -->
+  <div class="section-title">4 Règles de Priorité — Intraday</div>
+  <div class="pda-rules-grid">
+    <div class="pda-rule-card">
+      <div class="pda-rule-title">⚡ Préséance du Breaker</div>
+      <div class="pda-rule-body">Dès qu'un <strong>Breaker</strong> est identifié devant le prix, il bloque le retour vers le FVG, le Void ou l'OB situés derrière lui. <strong>Le Breaker prime sur tout.</strong></div>
+    </div>
+    <div class="pda-rule-card">
+      <div class="pda-rule-title">🚫 Pas de Forcing</div>
+      <div class="pda-rule-body">Rarement plus de <strong>2 à 4 PD Arrays</strong> dans un même range. Rayer mentalement ce qui n'est pas présent. Ignorer les arrays déjà <strong>épuisés / visités.</strong></div>
+    </div>
+    <div class="pda-rule-card">
+      <div class="pda-rule-title">⏱️ Réaction M15 Obligatoire</div>
+      <div class="pda-rule-body">En intraday, dès que le prix touche un PD Array sur M15, il <strong>doit réagir et partir vite.</strong> Plus le prix stagne sur le niveau M15, plus la probabilité chute brutalement.</div>
+    </div>
+    <div class="pda-rule-card">
+      <div class="pda-rule-title">🧲 Attraction Équilibre</div>
+      <div class="pda-rule-body">Quand le marché est en fort Premium ou Discount, son premier réflexe est de <strong>revenir à l'Équilibre 50%.</strong> En consolidation, les trades au milieu du range sont les plus piégeux.</div>
+    </div>
+  </div>
+
+  <!-- GRADUATION FIBONACCI -->
+  <div class="section-title">Graduation Fibonacci — Lecture du Range</div>
+  <div class="card" style="padding:14px 0 0;">
+    <table class="fib-table">
+      <thead><tr><th>Niveau Fib</th><th>Zone</th><th>Règle Intraday</th></tr></thead>
+      <tbody>
+        <tr><td class="fib-prem">100% — Old High</td><td class="fib-prem">Premium Extrême</td><td>Sommet du range · Cible BSL</td></tr>
+        <tr><td class="fib-prem">90%</td><td class="fib-prem">Deep Premium</td><td class="fib-warn">⛔ Aucun nouvel achat autorisé</td></tr>
+        <tr><td class="fib-prem">80%</td><td class="fib-prem">Premium</td><td>Zone de vente PD Arrays</td></tr>
+        <tr><td class="fib-eq">50%</td><td class="fib-eq">Equilibrium</td><td class="fib-eq">Frontière · Acheter en Discount uniquement</td></tr>
+        <tr><td class="fib-disc">30%</td><td class="fib-disc">Deep Discount</td><td>Zone d'achat PD Arrays</td></tr>
+        <tr><td class="fib-disc">20%</td><td class="fib-disc">Deepest Discount</td><td class="fib-warn">⛔ Aucune nouvelle vente · Prudence extrême</td></tr>
+        <tr><td class="fib-disc">0% — Old Low</td><td class="fib-disc">Discount Extrême</td><td>Fond du range · Cible SSL</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 16px;font-size:11px;color:var(--text-dim);">📐 Toujours tracer du bas (0) vers le haut (100) sur les <strong>corps</strong> des bougies (20 derniers jours Daily, Hier = J1, 40/60j si épuisés). Arrondir les Premium Arrays <strong>vers le bas</strong> et les Discount Arrays <strong>vers le haut</strong> au chiffre en <strong>0 ou 5</strong> (low-hanging fruit, Mois 12) + repères institutionnels <strong>00/20/50/80</strong> et mineurs <strong>30/70</strong> (Mois 6, spread inclus).</div>
+  </div>
+
+  <!-- CASCADE TOP-DOWN -->
+  <div class="section-title">Cascade Top-Down — Lecture Multi-Timeframes</div>
+  <div class="card">
+    <div class="check-item" data-macro="pd-daily" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>Daily / H4</strong> — Référence de direction. Identifier le PD Array visité hier et le Draw on Liquidity opposé (target).</div></div>
+    <div class="check-item" data-macro="pd-h1" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>H1 / M30 / M15</strong> — Repérer le FVG ou OB intraday en confluence avec le PD Array HTF. Choisir le TF qui révèle le mieux les FVG.</div></div>
+    <div class="check-item" data-macro="pd-m5" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>M5</strong> — Affiner l'entrée. OTE 62–70.5–79% · MSS + Displacement · SMT Divergence pour confirmer.</div></div>
+    <div class="check-item" data-macro="pd-space" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>Espace minimum</strong> — Au moins 50–60 pips libres jusqu'au PD Array opposé pour un vrai Day Trade. En dessous de 40 pips → Scalp uniquement.</div></div>
+    <div class="check-item" data-macro="pd-iof" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>IOF aligné</strong> — En tendance haussière, les Discount Arrays tiennent et les Premium Arrays cèdent. Inverse en baissier.</div></div>
+  </div>
+</div>
+
+<!-- ══ MODÈLES & RISK ══ -->
+<div class="view" id="view-risk">
+<div class="page-title">Risk Management & Discipline</div>
+  <div class="rule-banner">
+    <p><strong>ICT Month 05</strong> — « Calculez 1% sur 30% de votre capital total. Les 70% restants restent intouchables. Zéro appel de marge. Sérénité absolue. »</p>
+  </div>
+  <!-- RÈGLES MATHÉMATIQUES -->
+  <div class="section-title">Règles Mathématiques — Plafonds & Formule</div>
+  <div class="card" style="margin-bottom:8px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div style="background:var(--bg-elevated);border-radius:6px;padding:12px;text-align:center;border-top:2px solid var(--buy);">
+        <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--buy);">1%</div>
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">Daytrade</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:3px;">Plafond 1.5%–2% max</div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:6px;padding:12px;text-align:center;border-top:2px solid var(--gold);">
+        <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);">0.5%</div>
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">Scalp</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:3px;">1% maximum strict</div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:6px;padding:12px;text-align:center;border-top:2px solid var(--gold-dark);">
+        <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold-dark);">30%</div>
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">Base Active</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:3px;">70% intouchables</div>
+      </div>
+    </div>
+    <div style="background:var(--bg-elevated);border-radius:6px;padding:14px;">
+      <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">📐 Formule Exacte — Taille de Position</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text);text-align:center;padding:10px;background:var(--bg-card);border-radius:4px;border:1px solid var(--gold-border);margin-bottom:8px;">
+        $/pip = (Capital × Risque%) ÷ Stop Loss (pips)
+      </div>
+      <div style="font-size:11.5px;color:var(--text-muted);line-height:1.7;">
+        Ajuster la taille du lot pour que chaque pip corresponde exactement à cette valeur en dollars.<br>
+        <span style="color:var(--gold-dark);">💡 Option conservatrice :</span> Calculer 1% uniquement sur <strong style="color:var(--text);">30% du capital total</strong> — les 70% restants demeurent intouchables.
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULATEUR -->
+  <div class="section-title">Calculateur de Position</div>
+  <div class="card">
+    <div id="auto-mitigation-banner" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:6px;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.35);font-size:11.5px;color:var(--sell);"></div>
+    <div class="grid-3">
+      <div class="input-group"><label class="input-label">Capital Total ($)</label><input type="number" class="input-field" id="calc-capital" placeholder="10 000" oninput="calcRisk()"></div>
+      <div class="input-group"><label class="input-label">Base de Calcul</label><select class="input-field" id="calc-base-mode" onchange="calcRisk()"><option value="0.3">30% Conservateur (Mois 5)</option><option value="1">100% Capital Total</option></select></div>
+      <div class="input-group"><label class="input-label">Mode / Risque</label><select class="input-field" id="calc-risk" onchange="calcRisk()"><option value="1">1% — Daytrade</option><option value="0.5">0.5% — Scalp</option><option value="1.5">1.5% — Plafond Daytrade</option></select></div>
+    </div>
+    <div class="grid-3" style="margin-top:4px;">
+      <div class="input-group"><label class="input-label">Modèle SL (6 cas v8)</label><select class="input-field" id="calc-sl-preset" onchange="applySLPreset()"><option value="">— Manuel —</option><option value="30">30 pips — CBDR / Stops</option><option value="40">40 pips — Raid Asian Range</option><option value="10">10 pips — Extrême du jour / LC Rev</option><option value="30_ts">30 pips — 2e retour Turtle Soup</option><option value="50_adr">50% ADR 5j — Défaut Asian H/L</option><option value="100_adr">100% ADR 5j — Entrée 00:00 GMT</option></select></div>
+      <div class="input-group"><label class="input-label">Stop Loss (pips)</label><input type="number" class="input-field" id="calc-sl" placeholder="ex. 30" oninput="calcRisk()"></div>
+      <div class="input-group"><label class="input-label">Espace disponible (pips)</label><input type="number" class="input-field" id="calc-espace" placeholder="≥ 50–60p Daytrade" oninput="calcRisk()"></div>
+    </div>
+    <div class="grid-3" style="margin-top:4px;">
+      <div class="input-group"><label class="input-label">Prix d'Entrée (opt.)</label><input type="number" step="0.0001" class="input-field" id="calc-entry-price" placeholder="1.2740" oninput="calcRisk()"></div>
+      <div class="input-group"><label class="input-label">Direction</label><select class="input-field" id="calc-dir" onchange="calcRisk()"><option value="buy">📈 Buy</option><option value="sell">📉 Sell</option></select></div>
+      <div class="input-group"><label class="input-label">ADR 5j (pips, opt.)</label><input type="number" class="input-field" id="calc-adr-pips" placeholder="85" oninput="applySLPreset();calcRisk()"></div>
+    </div>
+    <!-- Alerte mode -->
+    <div id="calc-mode-alert" style="display:none;margin:8px 0;padding:9px 14px;border-radius:var(--radius);font-size:12px;font-weight:600;"></div>
+    <div id="calc-result" style="margin-top:10px;padding:14px;background:var(--bg-elevated);border-radius:var(--radius);">
+      <div class="grid-3" style="text-align:center;">
+        <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Capital Risqué</div><div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold);" id="res-amount">—</div></div>
+        <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Lots Standards</div><div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold);" id="res-lots">—</div></div>
+        <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;" id="res-base-lbl">Base Active (30%)</div><div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold-dark);" id="res-base">—</div></div>
+      </div>
+      <div id="res-extended"></div>
+    </div>
+  </div>
+
+
+  <!-- CALCULATEUR DE RANGES & PROJECTIONS SD / ADR 5J (v8) -->
+  <div class="section-title">Calculateur Rapide CBDR · Asian · Flout · ADR 5j (v8)</div>
+  <div class="sd-calc-box">
+    <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:12px;">Entrez les extrêmes de séance (corps prioritaires) pour calculer instantanément la validité (&lt; 40 pips), le 50 % Flout, les objectifs ±2 SD et les paliers ADR 5j (60–80 % &amp; 125–133 % LC Reversal).</div>
+    <div class="grid-3">
+      <div class="input-group" style="margin-bottom:0;"><label class="input-label">Range High (Prix)</label><input type="number" step="0.0001" class="input-field" id="sd-high" placeholder="1.2750" oninput="calcSD()"></div>
+      <div class="input-group" style="margin-bottom:0;"><label class="input-label">Range Low (Prix)</label><input type="number" step="0.0001" class="input-field" id="sd-low" placeholder="1.2725" oninput="calcSD()"></div>
+      <div class="input-group" style="margin-bottom:0;"><label class="input-label">ADR 5 Jours (Pips)</label><input type="number" class="input-field" id="sd-adr" placeholder="85" oninput="calcSD()"></div>
+    </div>
+    <div id="sd-status-bar" style="margin-top:10px;font-size:11.5px;font-weight:600;color:var(--text-muted);">Renseignez High &amp; Low pour évaluer la compression.</div>
+    <div class="sd-grid">
+      <div class="sd-cell"><div class="sd-cell-lbl">Amplitude · 50 % Flout</div><div class="sd-cell-val" id="sd-amp">—</div></div>
+      <div class="sd-cell"><div class="sd-cell-lbl">+2 SD / -2 SD</div><div class="sd-cell-val" id="sd-2sd">—</div></div>
+      <div class="sd-cell"><div class="sd-cell-lbl">TP ADR (80 % / -12 pips)</div><div class="sd-cell-val" id="sd-adr-tp" style="color:var(--buy);">—</div></div>
+      <div class="sd-cell"><div class="sd-cell-lbl">Seuil LC Rev (130 % ADR)</div><div class="sd-cell-val" id="sd-lc" style="color:var(--sell);">—</div></div>
+    </div>
+  </div>
+
+  <!-- PROTOCOLE MITIGATION -->
+  <div class="section-title">Protocole de Mitigation après Perte</div>
+  <div class="card" style="border-left:3px solid var(--sell);margin-bottom:8px;">
+    <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--sell);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">⚡ Règle de Protection — Réduction de 50% après toute perte</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="text-align:center;background:var(--bg-elevated);padding:10px 16px;border-radius:6px;border:1px solid rgba(231,76,60,0.3);">
+        <div style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--sell);">2%</div>
+        <div style="font-size:10px;color:var(--text-dim);">Risque initial</div>
+      </div>
+      <div style="color:var(--sell);font-size:20px;">→</div>
+      <div style="text-align:center;background:var(--bg-elevated);padding:10px 16px;border-radius:6px;border:1px solid var(--gold-border);">
+        <div style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);">1%</div>
+        <div style="font-size:10px;color:var(--text-dim);">Après perte</div>
+      </div>
+      <div style="color:var(--gold);font-size:20px;">→</div>
+      <div style="text-align:center;background:var(--bg-elevated);padding:10px 16px;border-radius:6px;border:1px solid rgba(46,204,113,0.3);">
+        <div style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--buy);">+2R</div>
+        <div style="font-size:10px;color:var(--text-dim);">Efface la perte</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);line-height:1.75;">
+      Après <strong style="color:var(--text);">toute perte</strong> → diviser immédiatement le risque par 2 sur le trade suivant.<br>
+      Un gain de <strong style="color:var(--buy);">2R</strong> sur ce trade réduit efface 100% de la perte précédente.<br>
+      <span style="color:var(--gold);">💡 Idéal jeudi/vendredi</span> pour clôturer la semaine à plat. Maximum <strong style="color:var(--text);">2 setups par jour.</strong>
+    </div>
+  </div>
+
+  <!-- RENTABILITÉ PROBABILISTE -->
+  <div class="card" style="border-left:3px solid var(--buy);margin-bottom:20px;">
+    <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--buy);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">📊 Rentabilité Probabiliste — Mois 2</div>
+    <div style="font-size:12px;color:var(--text-muted);line-height:1.75;">
+      Avec des setups cadrés à <strong style="color:var(--text);">3:1 ou 5:1 R:R</strong>, un taux de réussite de <strong style="color:var(--buy);">30% à 40%</strong> suffit largement à générer une croissance nette positive <span style="color:var(--gold);">sans pression psychologique.</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+      <div style="background:var(--bg-elevated);border-radius:6px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Win Rate minimum</div>
+        <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--buy);">33%</div>
+        <div style="font-size:10px;color:var(--text-dim);">pour R:R 3:1</div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:6px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Win Rate minimum</div>
+        <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--buy);">17%</div>
+        <div style="font-size:10px;color:var(--text-dim);">pour R:R 5:1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLEAU DAYTRADE VS SCALP -->
+  <div class="section-title">Daytrade vs Scalp — Paramètres Stricts</div>
+  <div class="card" style="padding:0;overflow:hidden;overflow-x:auto;margin-bottom:20px;">
+    <table class="regime-table" style="margin:0;min-width:500px;">
+      <thead>
+        <tr>
+          <th style="min-width:140px;">Paramètre</th>
+          <th style="color:#5dade2;">📊 DAYTRADE<br><span style="font-weight:400;font-size:9px;">Cible ≥ 50–60 pips</span></th>
+          <th style="color:#E59866;">⚡ SCALP<br><span style="font-weight:400;font-size:9px;">Cible 15–30 pips / &lt; 40 pips</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;font-size:11px;">Risque par trade</td>
+          <td style="font-size:11px;color:var(--buy);">1% recommandé<br><span style="color:var(--text-muted);">Plafond 1.5%–2%</span></td>
+          <td style="font-size:11px;color:var(--gold);">0.5% recommandé<br><span style="color:var(--text-muted);">1% maximum strict</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;font-size:11px;">Base de calcul</td>
+          <td style="font-size:11px;">Option conservatrice : 1% sur <strong>30% du capital</strong></td>
+          <td style="font-size:11px;">Même règle · 70% intouchables</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;font-size:11px;">Mitigation perte</td>
+          <td style="font-size:11px;color:var(--sell);">÷2 immédiatement<br><span style="color:var(--text-muted);">1% → 0.5% · idéal jeu/ven</span></td>
+          <td style="font-size:11px;color:var(--sell);">÷2 immédiatement<br><span style="color:var(--text-muted);">Max 2 setups/jour</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;font-size:11px;">Espace minimum</td>
+          <td style="font-size:11px;">≥ 50–60 pips libres<br><span style="color:var(--text-muted);">Minimum absolu : 40 pips</span></td>
+          <td style="font-size:11px;color:var(--gold);">&lt; 40 pips disponibles<br><span style="color:var(--text-muted);">Basculer en Scalp si &lt; 40</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;font-size:11px;">R:R cible</td>
+          <td style="font-size:11px;color:var(--buy);">3:1 minimum · idéal 5:1</td>
+          <td style="font-size:11px;color:var(--gold);">1:1 rapide (15–30 pips)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- RÈGLES ORDRES & PARTIELS -->
+  <div class="section-title">Règles Ordres, Breakeven & Partiels (v8)</div>
+  <div class="card">
+    <div class="check-item" data-macro="r-sl" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>SL calibré (6 cas exacts)</strong> — 30 / 40 / 10 pips, 30 pips 2e retour Turtle Soup, Asian H/L ± 50 % ADR 5j, 100 % ADR à 00:00 GMT ou option structurelle au-delà du PD Array suivant. Jamais élargi.</div></div>
+    <div class="check-item" data-macro="r-be" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>Break-Even (Mois 8)</strong> — Uniquement à <strong>40–50 % du range journalier</strong> en Daytrade (évite le double pass de Londres). Pas de BE prématuré en Scalp.</div></div>
+    <div class="check-item" data-macro="r-tp1" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>TP1 & Paliers Intraday</strong> — +20–30 pips, tous les 2 SD (CBDR/Asian), 50 % du range H1, avant 05:00 NY, avant 07:00 NY et entre 10:00–11:00 NY.</div></div>
+    <div class="check-item" data-macro="r-tp2" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>TP2 & ADR 5j</strong> — 60–80 % sécurisé 10–15 pips avant l'ADR 5j (<strong>80 % si ADR atteint avant 10:00 NY</strong>), PDH/PDL ± 5–15 pips, Previous Week/Month H/L.</div></div>
+    <div class="check-item" data-macro="r-run" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>Projections Fib & Fin de Journée</strong> — Si ADR &lt; 60 pips ou cassé : Fib 127 % / 162 % (ADR) ou 127 % / 168 % / 100 % measured move. Fin normale 12:00 NY · True Day Close 15:00 NY.</div></div>
+  </div>
+  <div class="section-title">Setups Spécifiques</div>
+  <div class="card">
+    <div class="check-item" data-macro="r-lc" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>London Close Reversal</strong> (10h–12h NY) — Expansion massive puis soldage des positions londoniennes</div></div>
+    <div class="check-item" data-macro="r-sent" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>Sentiment Effect</strong> — Williams %R(10) sur M15 au plus baissier/haussier au contact du PD Array (hors seuils 80/20) + sweep Asian H/L</div></div>
+    <div class="check-item" data-macro="r-20p" onclick="toggleMacro(this)"><div class="check-box"></div><div class="check-text"><strong>20 Pips/Jour</strong> — Retracement en Killzone NY (07h–09h) en continuation de tendance</div></div>
+  </div>
+
+<!-- 5 MODÈLES D'EXÉCUTION ICT -->
+  <div class="section-title">5 Modèles d'Exécution ICT (M15 / M5 uniquement — Jamais M1)</div>
+  <div class="model-card"><div class="model-head"><span class="model-name">1. 3 Modèles Universels (IRL / ERL / Breaker)</span><span class="model-win">London 01h–05h · NY 07h–10h</span></div><div class="model-body"><strong>IRL (Fair Value / OTE) :</strong> retour 62–79 % dans FVG/Void/OB. <strong>ERL (Turtle Soup) :</strong> sweep d'ancien H/L sur PD Array HTF. <strong>Breaker :</strong> retest du Breaker après purge + MSS (en rattrapage si Turtle Soup manqué ou en pyramidage).</div></div>
+  <div class="model-card"><div class="model-head"><span class="model-name">2. 20 Pips Per Day (NY Expansion / Asia Raid)</span><span class="model-win">NY ≤ 10h · Asia 20h–00h · R:R 1:1</span></div><div class="model-body"><strong>NY :</strong> Turtle Soup sur un swing M5 en continuation vers l'ADR 5j (extrême formé à Londres). <strong>Asia (JPY/AUD/NZD) :</strong> fade (+5 pips) d'un H/L de fin NY sur M5. <strong>SL fixe : 20 pips / TP fixe : 20 pips.</strong></div></div>
+  <div class="model-card"><div class="model-head"><span class="model-name">3. Bread & Butter (Buy / Sell)</span><span class="model-win">London · NY post-08h20 · Asia 20h</span></div><div class="model-body">Entrée au marché sur 1re respiration M5 dans OB/FVG vers ADR ou PD Array H1/H4. Cible : <strong>15–30 pips en 1–2 h (R:R ~1:1)</strong>. Asia Open : sortie totale 15–20 pips sans reliquat.</div></div>
+  <div class="model-card"><div class="model-head"><span class="model-name">4. London Close Reversal</span><span class="model-win">10:30 – 13:00 NY · &gt; 125–133 % ADR 5j</span></div><div class="model-body">Failure swing M5 à l'extrême du jour + OB opposé après Londres + NY dans le même sens ayant dépassé <strong>125–133 % de l'ADR 5j</strong>. <strong>SL : 10 pips</strong> au-delà du High/Low du jour · <strong>Cible : 20–30 % du range du jour</strong> (max 15–20 pips ; R:R 1:1).</div></div>
+  <div class="model-card" style="margin-bottom:20px;"><div class="model-head"><span class="model-name">5. Sentiment Effect & Consolidations</span><span class="model-win">Williams %R (10) M15 · Range</span></div><div class="model-body"><strong>Williams %R (10) sur M15</strong> au plus baissier/haussier au contact du PD Array sur sweep Asian H/L (valide le contre-pied de la foule à l'ouverture NY). <strong>En consolidation :</strong> subordination stricte au sens Daily/H4 — achetez uniquement sous le range si Daily/H4 haussier, ou vendez uniquement au-dessus si baissier (jamais les deux côtés).</div></div>
+
+  <!-- 6 CAS EXACT DE STOP LOSS (Mois 5, 8, 9 & 12) -->
+  <div class="section-title">Placement Exact du Stop Loss (6 Règles) & Breakeven</div>
+  <div class="card" style="margin-bottom:20px;">
+    <div style="font-size:12px;color:var(--text-muted);line-height:1.75;">
+      <div style="margin-bottom:6px;">• <strong style="color:var(--gold);">30 pips (depuis l'entrée) :</strong> confluence CBDR + PD Array ou raid de Sell/Buy Stops.</div>
+      <div style="margin-bottom:6px;">• <strong style="color:var(--gold);">40 pips (depuis l'entrée) :</strong> raid au-delà de l'Asian Range.</div>
+      <div style="margin-bottom:6px;">• <strong style="color:var(--gold);">10 pips au-delà de l'extrême du jour :</strong> 1er retracement dans un OB après impulsion directe post-00:00 NY (<strong>ou 30 pips</strong> au-delà de l'extrême du jour sur <strong>2e retour Turtle Soup</strong> — Mois 8).</div>
+      <div style="margin-bottom:6px;">• <strong style="color:var(--gold);">Défaut / Entrée 00:00 GMT :</strong> Asian Low - 50 % ADR 5j (Buy) ou Asian High + 50 % ADR 5j (Sell) ; <strong>100 % ADR 5j</strong> pour entrée à 00:00 GMT (ou fractionné 50 %/50 % à ±20 pips) sans réveil Londres.</div>
+      <div style="margin-bottom:6px;">• <strong style="color:var(--gold);">Option structurelle (Mois 12) :</strong> sur cadrage H1/M15, placer le SL juste au-delà du PD Array suivant (sous le prochain Discount Array à l'achat / au-dessus du prochain Premium Array à la vente). Plafond général intraday : ~30–35 pips (1/3 d'un ADR de 100 pips).</div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bg-elevated);"><strong style="color:var(--buy);">🛡️ Règle stricte Breakeven (Mois 8) :</strong> NE JAMAIS passer à Breakeven avant d'avoir atteint <strong>40 à 50 % du range journalier</strong> (Daytrade), pour éviter la double purge de Londres (<em>double pass</em>).</div>
+    </div>
+  </div>
+
+<!-- ══ SAISONNALITÉ ══ -->
+</div>
+
+<!-- ══ SAISONNALITÉ ══ -->
+<div class="view" id="view-saison">
+<div class="page-title">Tendances Saisonnières ICT</div>
+
+  <div class="current-banner" id="saison-current-banner"></div>
+
+  <!-- Navigation par Catégories d'Actifs -->
+  <div class="saison-cat-bar">
+    <button class="saison-cat-btn active" data-cat="forex">💱 Forex &amp; DXY</button>
+    <button class="saison-cat-btn" data-cat="bonds">🏛️ Bonds Market</button>
+    <button class="saison-cat-btn" data-cat="yields">📊 Yields US</button>
+    <button class="saison-cat-btn" data-cat="commodities">🥇 Métaux (Gold)</button>
+    <button class="saison-cat-btn" data-cat="indices">📈 Indices US</button>
+  </div>
+
+  <!-- Sous-onglets : FOREX & DXY -->
+  <div class="saison-tabs active" id="tabs-forex">
+    <button class="saison-tab active" data-asset="dxy">DXY</button>
+    <button class="saison-tab" data-asset="eurusd">EUR/USD</button>
+    <button class="saison-tab" data-asset="gbpusd">GBP/USD</button>
+    <button class="saison-tab" data-asset="regles">🛡️ 3 Règles d'Or</button>
+  </div>
+
+  <!-- Sous-onglets : BONDS MARKET -->
+  <div class="saison-tabs" id="tabs-bonds">
+    <button class="saison-tab" data-asset="zb">ZB (30Y T-Bonds)</button>
+    <button class="saison-tab" data-asset="zn">ZN (10Y T-Notes)</button>
+    <button class="saison-tab" data-asset="zf">ZF (5Y T-Notes)</button>
+  </div>
+
+  <!-- Sous-onglets : YIELDS US -->
+  <div class="saison-tabs" id="tabs-yields">
+    <button class="saison-tab" data-asset="us30y">US30Y</button>
+    <button class="saison-tab" data-asset="us10y">US10Y</button>
+    <button class="saison-tab" data-asset="us05y">US05Y</button>
+  </div>
+
+  <!-- Sous-onglets : MÉTAUX (GOLD) -->
+  <div class="saison-tabs" id="tabs-commodities">
+    <button class="saison-tab" data-asset="gold">Gold (GC / XAUUSD)</button>
+  </div>
+
+  <!-- Sous-onglets : INDICES US -->
+  <div class="saison-tabs" id="tabs-indices">
+    <button class="saison-tab" data-asset="nq">Nasdaq (NQ)</button>
+    <button class="saison-tab" data-asset="ym">Dow Jones (YM)</button>
+    <button class="saison-tab" data-asset="es">S&amp;P 500 (ES)</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CATÉGORIE 1 : FOREX & DXY                      -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- DXY -->
+  <div class="saison-panel active" id="panel-dxy">
+    <div class="month-row bullish" id="dxy-jan">
+      <div class="month-label">Janv → Mars</div>
+      <div class="month-body"><strong>📈 Rallye de Début d'Année</strong><br>Le DXY effectue un rallye haussier de janvier jusqu'en mars. En marché haussier du Dollar, janvier = mois d'achat · mars = point de vente saisonnier.<br><em>Effet miroir : faiblesse des obligations 10Y qui forment un sommet en janv-fév avant de décliner.</em></div>
+    </div>
+    <div class="month-row neutral" id="dxy-mars">
+      <div class="month-label">Mars/Avr → Mai</div>
+      <div class="month-body"><strong>🔄 Sommet de Printemps &amp; Bifurcation</strong><br>Fort sommet saisonnier entre mars-avril, puis déclin vers un creux en mai.<br>• <strong>Marché baissier DXY</strong> → baisse de mars à mai pleinement exprimée — scénario de vente de référence<br>• <strong>Marché haussier DXY</strong> → mars reste une fenêtre de vente, mais mai redevient un mois d'achat</div>
+    </div>
+    <div class="month-row bearish" id="dxy-juin">
+      <div class="month-label">Juin → Juillet</div>
+      <div class="month-body"><strong>🏔️ Sommet Majeur d'Été</strong><br>Le DXY forme historiquement un sommet majeur entre juin-juillet, suivi d'une tonalité baissière marquée. <strong>Même en marché haussier, juin et juillet sont des points de vente saisonniers.</strong><br><em>Effet miroir : creux saisonnier majeur des obligations 10Y → leur remontée fait baisser les rendements et détourne les capitaux du Dollar.</em><br>⚠️ Éviter les semaines en profil Seek &amp; Destroy durant juillet et août.</div>
+    </div>
+    <div class="month-row bearish" id="dxy-juil">
+      <div class="month-label">Juil → Oct/Nov</div>
+      <div class="month-body"><strong>📉 Déclin du Second Semestre</strong><br>Après son sommet de juin-juillet, le DXY tend à baisser continuellement jusqu'à un creux entre la dernière semaine d'octobre et la première semaine de novembre. S'aligne sur le rallye saisonnier des obligations 10Y de mai-juillet jusqu'aux sommets de décembre.<br>• <strong>Marché haussier DXY</strong> : point de vente intermédiaire possible en septembre — déclin non linéaire.</div>
+    </div>
+    <div class="month-row bullish" id="dxy-nov">
+      <div class="month-label">Oct/Nov → Fin Nov</div>
+      <div class="month-body"><strong>🔄 Petit Rebond Technique</strong><br>Après son creux de fin oct/début nov, le DXY produit généralement un petit rebond technique.<br>• <strong>Marché haussier DXY</strong> : novembre = mois d'achat · sommet à court terme dans la seconde moitié de novembre.</div>
+    </div>
+  </div>
+
+  <!-- EUR/USD -->
+  <div class="saison-panel" id="panel-eurusd">
+    <div class="month-row bearish" id="eur-jan">
+      <div class="month-label">Janv → Mi-Mars</div>
+      <div class="month-body"><strong>📉 Pression Bearish via le DXY</strong><br>Rallye du DXY de janv à mars → pression vendeuse de fond sur l'EUR/USD par corrélation inverse. La courbe saisonnière propre à l'Euro commence toutefois par une petite poussée haussière jusqu'à mi-mars avant de se retourner.</div>
+    </div>
+    <div class="month-row bearish" id="eur-mars">
+      <div class="month-label">Mi-Mars → Déb. Avr</div>
+      <div class="month-body"><strong>📉 Repli Saisonnier Baissier</strong><br>Après la poussée initiale, forte tendance baissière de la seconde moitié de mars jusqu'à la première semaine d'avril — les deux courbes longue et courte dans le même sens.<br>⚠️ <strong>Contraste clé vs GBP/USD</strong> : le creux idéal long terme de l'EUR/USD n'est pas au printemps mais en été.</div>
+    </div>
+    <div class="month-row neutral" id="eur-avr">
+      <div class="month-label">Avr → Mai</div>
+      <div class="month-body"><strong>⚖️ Bifurcation selon Régime DXY</strong><br>• <strong>Marché baissier DXY</strong> → baisse du DXY de mars à mai pleinement exprimée → soutien possible pour l'EUR/USD<br>• <strong>Marché haussier DXY</strong> → mars reste un point de vente mais mai redevient un mois d'achat sur le DXY → prudence sur l'EUR/USD</div>
+    </div>
+    <div class="month-row bullish" id="eur-juin">
+      <div class="month-label">Juin → Juillet</div>
+      <div class="month-body"><strong>🎯⭐ Ideal Seasonal Tendency Bullish — Creux d'Été Majeur</strong><br>Scénario saisonnier n°1 d'ICT sur l'EUR/USD. Formation du creux d'été majeur entre juin-juillet — point d'achat institutionnel HTF le plus fiable de l'année.<br><strong>Triple confirmation simultanée :</strong> DXY forme son sommet majeur d'été → commence à baisser · ZN forme son creux saisonnier → remonte, fait baisser les rendements · EUR/USD forme son bas saisonnier → signal d'achat HTF<br>⚠️ Si ZN et DXY montent en tandem → signal de large consolidation → pas de tendance, éviter le trade.</div>
+    </div>
+    <div class="saison-gap"></div>
+    <div class="month-row bullish" id="eur-juil">
+      <div class="month-label">Juil → Oct/Nov</div>
+      <div class="month-body"><strong>📈 Biais Bullish par Miroir du DXY</strong><br>Après son sommet d'été, le DXY tend à baisser jusqu'à fin oct/début nov → déclin du Dollar crée un biais de fond favorable à l'EUR/USD durant toute cette période.<br>• <strong>Marché haussier DXY</strong> : point de vente intermédiaire possible en septembre — déclin non linéaire.<br><em>Note : le biais se déduit uniquement par lecture inverse du cycle DXY pour cette fenêtre.</em></div>
+    </div>
+    <div class="month-row bearish" id="eur-nov">
+      <div class="month-label">Novembre → Fin Nov</div>
+      <div class="month-body"><strong>🔄 Rebond Technique du DXY → Frein sur l'EUR/USD</strong><br>Après son creux de fin oct/début nov, le DXY produit un petit rebond technique. En marché haussier du Dollar, novembre est un mois d'achat sur le DXY qui forme un sommet à court terme → ce rebond tend à freiner ou corriger l'EUR/USD.</div>
+    </div>
+  </div>
+
+  <!-- GBP/USD -->
+  <div class="saison-panel" id="panel-gbpusd">
+    <div class="month-row bearish" id="gbp-jan">
+      <div class="month-label">Janv → Mars</div>
+      <div class="month-body"><strong>📉 Pression Bearish via le DXY</strong><br>Rallye du Dollar de janvier à mars → pression vendeuse de fond sur le Cable par corrélation inverse.<br>⏱️ Le creux saisonnier majeur du Cable ne se forme pas dès janvier — il se construit progressivement pour atteindre son point bas dans la fenêtre mars-avril.</div>
+    </div>
+    <div class="month-row bullish" id="gbp-mars">
+      <div class="month-label">Mars/Avr → Mai</div>
+      <div class="month-body"><strong>📈⭐ Ideal Seasonal Tendency Bullish — Rallye de Printemps</strong><br>Scénario saisonnier n°1 d'ICT sur le GBP/USD. Le Cable forme un creux majeur entre mars-avril, puis rallye directionnel vers un sommet autour de mai — en miroir exact d'un DXY qui forme son sommet en mars-avril et baisse vers mai.<br>• <strong>Marché baissier DXY</strong> : scénario idéal, baisse du DXY de mars à mai pleinement exprimée<br>• <strong>Marché haussier DXY</strong> : mars reste un mois de vente mais mai redevient un mois d'achat → prudence<br>✅ Idéal quand le GBP/USD est en Primary Uptrend ou qu'un retournement haussier HTF est suspecté.</div>
+    </div>
+    <div class="month-row warning" id="gbp-juin">
+      <div class="month-label">Juin → Juillet</div>
+      <div class="month-body"><strong>⚖️ Sommet DXY &amp; Prudence Estivale</strong><br>Le DXY forme son sommet saisonnier majeur entre juin et juillet — aucune fiche saisonnière propre au Cable n'est enseignée par ICT pour cette fenêtre. Le creux de juin-juillet appartient à l'EUR/USD et à l'USD/CHF, pas au Cable.<br>⚠️ Éviter les semaines en profil Seek &amp; Destroy durant juillet et août.</div>
+    </div>
+    <div class="month-row bullish" id="gbp-juil">
+      <div class="month-label">Juil → Oct/Nov</div>
+      <div class="month-body"><strong>📈 Biais Bullish par Miroir du DXY</strong><br>Après son sommet d'été, le DXY tend à baisser jusqu'à fin oct/début nov → déclin du Dollar crée un biais de fond favorable au GBP/USD durant toute cette période.<br>• Ce déclin n'est pas nécessairement linéaire — point de vente intermédiaire possible sur le DXY en septembre.<br><em>Note : ICT ne fournit pas de fiche saisonnière propre au Cable pour ces mois.</em></div>
+    </div>
+    <div class="month-row neutral" id="gbp-oct">
+      <div class="month-label">Fin Oct / Déb. Nov</div>
+      <div class="month-body"><strong>🔄 Sommet GBP/USD &amp; Creux DXY</strong><br>La dernière semaine d'octobre et la première semaine de novembre = creux saisonnier du DXY — fin de sa longue baisse depuis juin-juillet. Par effet miroir, le GBP/USD forme ici un <strong>sommet majeur</strong>. Le DXY entame ensuite un petit rebond technique en novembre.</div>
+    </div>
+    <div class="month-row bearish" id="gbp-nov">
+      <div class="month-label">Nov → Déc</div>
+      <div class="month-body"><strong>📉 Correction Technique</strong><br>Le rebond du DXY en novembre exerce une pression vendeuse sur le GBP/USD → phase de correction ou de consolidation. Le DXY forme un sommet court terme dans la seconde moitié de novembre.</div>
+    </div>
+  </div>
+
+  <!-- 3 RÈGLES D'OR FOREX -->
+  <div class="saison-panel" id="panel-regles">
+    <div class="regle-card">
+      <div class="regle-num">Règle n°1</div>
+      <div class="regle-title">Le Filtre des 10-Year Notes — Tendance vs Consolidation</div>
+      <div class="regle-body">
+        <strong>DXY et 10Y Notes en OPPOSITION :</strong><br>
+        <span class="ok">✅ Rendements montent → DXY monte · Rendements baissent → DXY baisse</span><br>
+        → Le Dollar développe de grands mouvements directionnels — <strong>c'est le moment de trader.</strong><br><br>
+        <strong>DXY et 10Y Notes dans la MÊME DIRECTION (in tandem) :</strong><br>
+        <span class="ko">❌ Signal d'une grande indécision long terme — marché en range sur le DXY ET sur les paires Forex</span><br>
+        → <strong>Éviter de trader.</strong>
+      </div>
+    </div>
+    <div class="regle-card">
+      <div class="regle-num">Règle n°2</div>
+      <div class="regle-title">Ne Jamais Trader la Saisonnalité Isolément</div>
+      <div class="regle-body">
+        La Seasonal Tendency du DXY est une <strong>carte routière — jamais une panacée ni une garantie.</strong> Elle doit obligatoirement être validée par :<br><br>
+        <span class="ok">✅ Les PD Arrays HTF (Order Blocks, Fair Value Gaps...)</span><br>
+        <span class="ok">✅ Le Lookback IPDA (20, 40 et 60 jours)</span><br>
+        <span class="ok">✅ Idéalement une divergence SMT entre le DXY et les 10Y Notes — ou une paire Forex (EUR/USD / GBP/USD)</span>
+      </div>
+    </div>
+    <div class="regle-card">
+      <div class="regle-num">Règle n°3</div>
+      <div class="regle-title">Lire l'Absence de Saisonnalité</div>
+      <div class="regle-body">
+        Si le DXY reste plat ou part dans le sens inverse de sa fenêtre saisonnière attendue :<br><br>
+        <span class="warn">⚠️ Soit une consolidation prolongée à venir</span><br>
+        <span class="warn">⚠️ Soit une force sous-jacente dominante dans le sens opposé qui prend le dessus</span><br><br>
+        💡 <strong>Quand le marché ne fait PAS ce qu'il devrait saisonnalement faire — c'est en soi une information capitale. Ne pas forcer le trade.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CATÉGORIE 2 : BONDS MARKET                     -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- ZB (30-Year T-Bonds) -->
+  <div class="saison-panel" id="panel-zb">
+    <div class="month-row bearish" id="zb-jan">
+      <div class="month-label">Janv → Mai</div>
+      <div class="month-body"><strong>📉 Phase de Faiblesse Saisonnière</strong><br>Glissement progressif des cours vers un creux saisonnier attendu au printemps.<br>• Exploiter la faiblesse baissière en direction de mai-juin ou attendre patiemment le creux majeur de fin de printemps.</div>
+    </div>
+    <div class="month-row bullish" id="zb-mai">
+      <div class="month-label">Mai → Juin (tol. Juil)</div>
+      <div class="month-body"><strong>🎯⭐ Setup n°1 — Creux Majeur &amp; Bond Mega-Trade</strong><br>Fenêtre saisonnière n°1 sur le ZB avec probabilité élevée de creux majeur (objectif ≥ 10 handles / 10 000 $ par contrat).<br>• <strong>Tolérance de timing :</strong> le point bas peut parfois se décaler légèrement jusqu'en juillet.<br>• <strong>Triple confirmation intermarché :</strong> Creux ZB → obligations montent → rendements baissent → pèse sur le DXY (sommet d'été juin-juillet) → EUR/USD et GBP/USD libèrent leur biais haussier.</div>
+    </div>
+    <div class="month-row bullish" id="zb-juin">
+      <div class="month-label">Été → Sept / Oct</div>
+      <div class="month-body"><strong>📈 Phase d'Expansion Haussière</strong><br>Tendance haussière sur plusieurs semaines/mois en direction des sommets d'automne.<br>• <strong>Gestion du contrat (Rollover) :</strong> rouler la position du contrat de septembre (U) vers le contrat de décembre (Z) à l'approche de l'expiration.<br>• <strong>Vigilance sommets précoces :</strong> certaines années, le sommet est atteint dès juillet ou août avant un repli.</div>
+    </div>
+    <div class="month-row neutral" id="zb-sept">
+      <div class="month-label">Sept → Nov</div>
+      <div class="month-body"><strong>🔄 Rallyes Intermédiaires de Fin d'Année</strong><br>Deux creux intermédiaires secondaires générant des rallyes haussiers courts (Sept → Oct et Oct → Nov).<br>• <strong>Condition de marché :</strong> en marché baissier marqué en fin d'année, ces rebonds peuvent ne pas se matérialiser.</div>
+    </div>
+  </div>
+
+  <!-- ZN (10-Year T-Notes) -->
+  <div class="saison-panel" id="panel-zn">
+    <div class="month-row bearish" id="zn-jan">
+      <div class="month-label">Janv/Fév → Fin Mai</div>
+      <div class="month-body"><strong>📉 Sommet de Début d'Année &amp; Biais Bearish</strong><br>Sommet saisonnier entre janvier et février suivi d'un déclin durant toute la première moitié de l'année.<br><em>Effet miroir : ZN baisse → rendements montent → capitaux attirés vers le Dollar → soutient le rallye du DXY de janv-fév jusqu'en mars.</em></div>
+    </div>
+    <div class="month-row bullish" id="zn-mai">
+      <div class="month-label">Fin Mai → 1re Sem. Juil</div>
+      <div class="month-body"><strong>🎯⭐ Creux Majeur &amp; Signal d'Achat n°1</strong><br>Signal d'achat saisonnier le plus fort sur le ZN, étendu de la dernière semaine de mai à la première semaine de juillet.<br>• <strong>Triple effet miroir simultané :</strong> ZN forme son creux et remonte → rendements baissent → DXY forme son sommet majeur d'été (juin-juillet) et baisse → EUR/USD et GBP/USD libèrent leur hausse saisonnière.<br>⚠️ <strong>Alerte de consolidation :</strong> si ZN et DXY montent dans la même direction (in tandem) → indécision long terme → range sur DXY et Forex → éviter le position trading.</div>
+    </div>
+    <div class="month-row bullish" id="zn-juin">
+      <div class="month-label">Juin/Juil → Déc</div>
+      <div class="month-body"><strong>📈 Expansion Haussière du Second Semestre</strong><br>Progression haussière vers les sommets de décembre maintenant une pression baissière sur les rendements.<br>• Accompagne le déclin saisonnier du DXY vers son creux de fin octobre / première semaine de novembre → biais haussier de fond sur EUR/USD et GBP/USD.</div>
+    </div>
+    <div class="month-row warning" id="zn-nov">
+      <div class="month-label">Nov → Fin Déc</div>
+      <div class="month-body"><strong>🔄 Sommet Saisonnier de Novembre &amp; Retournement Possible</strong><br>Formation d'un sommet potentiel en novembre (début de négociation du contrat de livraison de mars) avant un reflux vers fin décembre.<br>• <strong>Usage tactique :</strong> passer vendeur sur le ZN en novembre → remontée des rendements → poussée haussière du DXY.<br>• Creux secondaires d'automne (sept-oct et oct-nov) adaptés au short-term trading uniquement.</div>
+    </div>
+  </div>
+
+  <!-- ZF (5-Year T-Notes) -->
+  <div class="saison-panel" id="panel-zf">
+    <div class="month-row warning" id="zf-jan">
+      <div class="month-label">Janv → Fév</div>
+      <div class="month-body"><strong>🔄 Phase de Sommet Initial &amp; Début de Faiblesse</strong><br>Formation du sommet saisonnier majeur entre janvier et février amorçant la baisse du premier semestre.</div>
+    </div>
+    <div class="month-row bearish" id="zf-fev">
+      <div class="month-label">Fév → Mai/Juin</div>
+      <div class="month-body"><strong>📉 Biais Baissier Majeur &amp; Creux de Printemps/Été</strong><br>Principale phase de baisse du S1 aboutissant au creux d'achat institutionnel majeur (May-June Low).</div>
+    </div>
+    <div class="month-row bullish" id="zf-juin">
+      <div class="month-label">Juin → Sept</div>
+      <div class="month-body"><strong>📈 Biais Bullish — Le Rallye Estival</strong><br>Puissante vague d'expansion haussière régulière tout au long de l'été vers les objectifs du S2.</div>
+    </div>
+    <div class="month-row neutral" id="zf-sept">
+      <div class="month-label">Sept → Nov</div>
+      <div class="month-body"><strong>⚖️ Consolidation &amp; Creux Intermédiaires d'Automne</strong><br>Phase de retracement/consolidation formant un point bas d'accumulation secondaire entre fin septembre et fin octobre / début novembre.</div>
+    </div>
+    <div class="month-row bullish" id="zf-nov">
+      <div class="month-label">Nov → Déc</div>
+      <div class="month-body"><strong>📈⭐ Biais Fortement Bullish &amp; Sommet de Fin d'Année</strong><br>Expansion haussière finale soutenue par la réallocation des portefeuilles institutionnels jusqu'au sommet annuel de décembre.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CATÉGORIE 3 : YIELDS US                        -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- US30Y -->
+  <div class="saison-panel" id="panel-us30y">
+    <div class="month-row bullish" id="us30y-jan">
+      <div class="month-label">Janv/Fév → Mai</div>
+      <div class="month-body"><strong>📈 Pression Haussière sur le US30Y</strong><br>Par inversion directe du ZB (qui entre en phase de faiblesse dès le début d'année), le rendement à 30 ans monte vers un sommet de printemps/début d'été.<br>• <strong>Synchronisation DXY :</strong> s'accorde avec le rallye saisonnier du DXY de janv-fév jusqu'en mars.</div>
+    </div>
+    <div class="month-row bearish" id="us30y-mai">
+      <div class="month-label">Mai → Juin (tol. Juil)</div>
+      <div class="month-body"><strong>🎯📉⭐ Sommet Majeur du US30Y &amp; Retournement Baissier</strong><br>Miroir direct du creux majeur du ZB (Bond Mega-Trade) : les rendements atteignent leur pic annuel et amorcent leur retournement baissier (tolérance jusqu'en juillet).<br>• <strong>Effet miroir DXY :</strong> coïncide exactement avec le sommet saisonnier majeur du DXY (juin-juillet) → double confirmation de la faiblesse Dollar.</div>
+    </div>
+    <div class="month-row bearish" id="us30y-ete">
+      <div class="month-label">Été → Sept / Oct</div>
+      <div class="month-body"><strong>📉 Déclin Tendanciel des Rendements</strong><br>Durant la progression haussière du ZB, le US30Y décline tout au long de l'été vers des points bas d'automne.<br>⚠️ <strong>Vigilance :</strong> si le ZB atteint son sommet dès juillet-août, le déclin des rendements peut s'arrêter plus tôt que prévu.</div>
+    </div>
+    <div class="month-row neutral" id="us30y-sept">
+      <div class="month-label">Sept → Nov</div>
+      <div class="month-body"><strong>🔄 Deux Pics Intermédiaires Courts</strong><br>En miroir des deux creux intermédiaires du ZB, le US30Y connaît deux pics courts suivis de replis (sept-oct et oct-nov).<br>• En marché obligataire nettement baissier, ces rebonds peuvent ne pas se matérialiser ou être plus violents.</div>
+    </div>
+    <div class="saison-rules-section">
+      <div class="regle-card">
+        <div class="regle-num">Règle n°1 — US30Y</div>
+        <div class="regle-title">Jamais une Garantie</div>
+        <div class="regle-body">Ne jamais forcer un scénario saisonnier sans validation technique HTF (<strong>PD Arrays + Institutional Order Flow</strong>).</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Règle n°2 — US30Y</div>
+        <div class="regle-title">Scanner la Triade 5Y / 10Y / 30Y pour la Divergence SMT</div>
+        <div class="regle-body">Aux retournements saisonniers (mai-juin) comme en intraday entre <strong>8h00 et 8h30 NY</strong>, comparer ZF, ZN et ZB → dès qu'un des trois diverge (<em>crack in correlation</em>), la Smart Money libère la volatilité sur le Forex.</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Règle n°3 — US30Y</div>
+        <div class="regle-title">Filtrer Tendance vs Consolidation</div>
+        <div class="regle-body">Quand les rendements restent en range ou évoluent dans la même direction que le DXY → paires Forex piégées en consolidation → réserver l'approche au <strong>court terme et au daytrading uniquement</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- US10Y -->
+  <div class="saison-panel" id="panel-us10y">
+    <div class="month-row bullish" id="us10y-jan">
+      <div class="month-label">Janv/Fév → Fin Mai</div>
+      <div class="month-body"><strong>📈 Creux de Début d'Année &amp; Pression Haussière</strong><br>Par inversion directe du ZN, le US10Y forme un point bas vers janv-fév puis monte vers le milieu d'année, s'alignant sur le rallye du DXY de janv-fév jusqu'en mars.</div>
+    </div>
+    <div class="month-row bearish" id="us10y-mai">
+      <div class="month-label">Fin Mai → 1re Sem. Juil</div>
+      <div class="month-body"><strong>🎯📉⭐ Sommet Majeur du US10Y &amp; Signal Baissier n°1</strong><br>Miroir direct du creux majeur du ZN : pic annuel des rendements et retournement baissier (de la dernière semaine de mai à la première semaine de juillet).<br>• <strong>Triple effet miroir :</strong> US10Y baisse + ZN remonte → DXY forme son sommet d'été (juin-juillet) et baisse → EUR/USD libère son signal d'achat HTF.</div>
+    </div>
+    <div class="month-row bearish" id="us10y-juin">
+      <div class="month-label">Juin/Juil → Déc</div>
+      <div class="month-body"><strong>📉 Déclin Saisonnier du Second Semestre</strong><br>Détente des rendements vers les points bas de fin d'année, accompagnant le déclin du DXY vers son creux de fin oct / 1re sem. nov → biais haussier de fond EUR/USD et GBP/USD.<br>• Deux petits pics suivis de replis en sept-oct et oct-nov (court terme uniquement).</div>
+    </div>
+    <div class="month-row warning" id="us10y-nov">
+      <div class="month-label">Nov → Fin Déc</div>
+      <div class="month-body"><strong>🔄📈 Creux Potentiel &amp; Rebond Tactique</strong><br>En miroir du sommet potentiel du ZN en novembre (contrat de mars), novembre peut marquer un creux tactique sur le US10Y suivi d'un rebond des rendements jusqu'en décembre.<br>• <strong>Usage tactique :</strong> permet de jouer une hausse du DXY en nov-déc lorsque le signal estival touche à sa fin.</div>
+    </div>
+    <div class="saison-rules-section">
+      <div class="regle-card">
+        <div class="regle-num">Règle n°1 — US10Y</div>
+        <div class="regle-title">Filtrer Tendance Explosive vs Consolidation</div>
+        <div class="regle-body"><span class="ok">✅ US10Y et DXY en sens opposé</span> → longues tendances directionnelles sur le Forex.<br><span class="ko">❌ US10Y en range ou ZN et DXY in tandem</span> → indécision long terme → Forex en consolidation (court terme uniquement).</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Règle n°2 — US10Y</div>
+        <div class="regle-title">Valider les Points Tournants par Divergence SMT</div>
+        <div class="regle-body">• <strong>ZN vs DXY :</strong> rupture de corrélation (ZN creux égaux pendant que DXY échoue à faire de nouveaux plus hauts) → confirme un <em>Quarterly Shift</em> (1,5 à 3 mois).<br>• <strong>Triade 5Y / 10Y / 30Y :</strong> divergence entre 8h00 et 8h30 NY avant les annonces économiques.</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Règle n°3 — US10Y</div>
+        <div class="regle-title">Ne Jamais Forcer la Saisonnalité</div>
+        <div class="regle-body">Si le retournement estival ne se produit pas → basculer vers le scénario de novembre. Toujours exiger <strong>PD Arrays HTF, plages IPDA (20/40/60 jours) et Open Interest</strong> avant toute entrée.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- US05Y -->
+  <div class="saison-panel" id="panel-us05y">
+    <div class="month-row bullish" id="us05y-jan">
+      <div class="month-label">Janv/Fév → Avr/Mai</div>
+      <div class="month-body"><strong>📈 Pression Haussière par Sympathie Obligataire</strong><br>Par repère du complexe obligataire (faiblesse ZN/ZB dès le début d'année), le US05Y subit une pression haussière cohérente avec le rallye du DXY au T1.<br>⚠️ Vigilance sur les phases de consolidation printanière bridant les tendances durables sur le Forex.</div>
+    </div>
+    <div class="month-row bearish" id="us05y-mai">
+      <div class="month-label">Mai → Début Juil</div>
+      <div class="month-body"><strong>🎯📉⭐ Fenêtre Maîtresse — Sommet Saisonnier Majeur</strong><br>Seule fenêtre suivie systématiquement sur le contrat 5 ans (livraison septembre) en parallèle de ZN et ZB → sommet majeur du US05Y et retournement baissier coïncidant avec le sommet d'été du DXY (juin-juillet).<br>• <strong>Config 1 (SMT Bullish obligataire) :</strong> contrat 5Y forme un Higher Low pendant que ZN/ZB creusent un plus bas → rendements 5Y refusent de monter.<br>• <strong>Config 2 (SMT Inversée / Sweep) :</strong> contrat 5Y inscrit un plus bas pendant que ZN/ZB refusent de baisser → même conclusion baissière sur les rendements.<br>• <strong>Config 3 (Absence de divergence) :</strong> les 3 échéances (5Y/10Y/30Y) baissent ensemble → échec saisonnier, pas de retournement estival.</div>
+    </div>
+    <div class="month-row bearish" id="us05y-juin">
+      <div class="month-label">Juin/Juil → Oct/Nov</div>
+      <div class="month-body"><strong>📉🔄 Déclin Saisonnier &amp; Pics Intermédiaires d'Automne</strong><br>Baisse des rendements durant tout le second semestre accompagnant le déclin du DXY vers fin oct / 1re sem. nov, ponctuée de deux pics courts (sept-oct et oct-nov).<br>• <strong>Confirmation SMT d'automne :</strong> divergence entre contrat 5Y (Higher Low) et ZN/ZB (Lower Low) en sept-oct déclenchant une envolée obligataire et une chute des rendements.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CATÉGORIE 4 : MÉTAUX (GOLD)                    -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- GOLD -->
+  <div class="saison-panel" id="panel-gold">
+    <div class="month-row bullish" id="gold-dec">
+      <div class="month-label">Déc → Mi-Fév/Mars</div>
+      <div class="month-body"><strong>📈⭐ Le Rallye Hivernal — Million Dollar Swing Setup</strong><br>Forte tendance saisonnière haussière de décembre jusqu'à mi-février / début mars.<br>• <strong>Nuance tactique :</strong> un repli vendeur en janvier-février n'est envisageable que de manière très ponctuelle — le scénario idéal de fond reste acheteur.<br>• <strong>Différence Silver :</strong> sur le Silver, février constitue un point de vente saisonnier.</div>
+    </div>
+    <div class="month-row neutral" id="gold-mars">
+      <div class="month-label">Mars → Juin</div>
+      <div class="month-body"><strong>⚖️ Zone Non Couverte en Fiche Propre</strong><br>Aucune fenêtre saisonnière spécifique propre à l'Or. La direction printanière est encadrée par le comportement du DXY et les PD Arrays Weekly / Daily.</div>
+    </div>
+    <div class="month-row bullish" id="gold-juil">
+      <div class="month-label">Juillet → Août</div>
+      <div class="month-body"><strong>🎯📈⭐ Scénario Idéal n°1 — Creux d'Été &amp; Lancement Haussier</strong><br>Règle centrale d'ICT sur l'Or : formation du creux majeur de juillet-août avant le lancement haussier.<br>• <strong>Moteur fondamental :</strong> cycle physique de la bijouterie/joaillerie en préparation des fêtes de Noël et du Nouvel An.<br>• <strong>Synchronisation DXY :</strong> s'emboîte avec le sommet saisonnier majeur du DXY (juin-juillet) suivi de sa baisse → double confirmation bullish.</div>
+    </div>
+    <div class="month-row bullish" id="gold-sept">
+      <div class="month-label">Sept → Nov</div>
+      <div class="month-body"><strong>🔄 Poursuite Saisonnière &amp; Transition Automnale</strong><br>Progression portée par la demande physique de fin d'année et le déclin du DXY vers fin oct / 1re sem. nov.<br>⚠️ Le petit rebond du DXY en novembre peut freiner temporairement les métaux précieux.</div>
+    </div>
+    <div class="saison-rules-section">
+      <div class="regle-card">
+        <div class="regle-num">Filtres n°1 &amp; n°2 — Gold</div>
+        <div class="regle-title">Force Relative &amp; Major Market Analysis</div>
+        <div class="regle-body">• <strong>Jamais une garantie :</strong> si l'Or refuse de baisser durant une fenêtre potentiellement faible et part à la hausse → force sous-jacente exceptionnelle → ne pas shorter.<br>• <strong>Major Market Analysis :</strong> vérifier qu'au moins un marché de chaque paire d'actifs est en tendance (Obligations/DXY ET Actions/Matières Premières).</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Filtres n°3 &amp; n°4 — Gold</div>
+        <div class="regle-title">COT Hedging Program (12 Mois) &amp; Open Interest</div>
+        <div class="regle-body">• <strong>COT (12 mois) :</strong> tracer la plage des 12 derniers mois des positions nettes des Commercials — un passage au-dessus de la ligne médiane (réduction agressive des shorts) confirme l'accumulation institutionnelle.<br>• <strong>Open Interest (≥ 10–15 %) :</strong> baisse nette de l'OI en zone de support (rachat de shorts par les Commercials).</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Filtres n°5 &amp; n°6 — Gold</div>
+        <div class="regle-title">Divergence SMT, Sentiment &amp; Premium Market</div>
+        <div class="regle-body">• <strong>Divergence SMT :</strong> l'Or forme un Higher Low pendant que le DXY inscrit un Higher High (confirmé par Silver et Cuivre).<br>• <strong>Sentiment &amp; Structure :</strong> Williams %R (15D) sous 50 + titres médiatiques baissiers + <strong>Premium Market</strong> (échéance proche &gt; échéances suivantes) + entrée sur PD Array Discount HTF.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CATÉGORIE 5 : INDICES US                       -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- NASDAQ (NQ) -->
+  <div class="saison-panel" id="panel-nq">
+    <div class="month-row bearish" id="nq-jan">
+      <div class="month-label">Janvier</div>
+      <div class="month-body"><strong>📉 Bearish / Accumulation Initiale</strong><br>Mois statistiquement baissier — fenêtre de vente à découvert en marché baissier. En marché haussier, sert à forger le creux initial ou une divergence d'accumulation avant février-mai.</div>
+    </div>
+    <div class="month-row bullish" id="nq-fev">
+      <div class="month-label">Février</div>
+      <div class="month-body"><strong>📈⭐ Bullish — Lancement du Printemps</strong><br>Ouvre la première grande fenêtre haussière (Février → Mai), validée par des divergences SMT entre NQ, ES et YM dès les premiers jours (jours 2-3 puis 6-8).</div>
+    </div>
+    <div class="month-row neutral" id="nq-mars">
+      <div class="month-label">Mars</div>
+      <div class="month-body"><strong>↔️ Consolidation — Mois Peu Fructueux</strong><br>L'un des 3 mois les moins favorables avec juin et août : à-coups (whipsaws) avec pression baissière semaines 2-3 suivie d'un rebond vers la clôture.</div>
+    </div>
+    <div class="month-row bullish" id="nq-avr">
+      <div class="month-label">Avril</div>
+      <div class="month-body"><strong>📈 Bullish — Accélération de Printemps</strong><br>Début hésitant puis forte accélération haussière jusqu'à fin avril. Le NQ forme fréquemment des Higher Lows face au Dow ou au S&amp;P (SMT d'accumulation).</div>
+    </div>
+    <div class="month-row bearish" id="nq-mai">
+      <div class="month-label">Mai</div>
+      <div class="month-body"><strong>📉 Bearish — Entrée en Faible Magnitude</strong><br>Début de la période de faible magnitude (Mai → Octobre) et ouverture de la fenêtre Sell Watchlists (Mai → Juillet / mi-septembre). Baisse souvent jusqu'à la 3e semaine avant un sursaut en fin de mois.</div>
+    </div>
+    <div class="month-row bearish" id="nq-juin">
+      <div class="month-label">Juin</div>
+      <div class="month-body"><strong>↔️📉 Consolidation → Clôture Bearish</strong><br>L'un des 3 mois les moins fructueux (avec mars et août). Un plus haut du NQ non confirmé par ES et YM = signal classique de distribution institutionnelle.</div>
+    </div>
+    <div class="month-row bullish" id="nq-juil">
+      <div class="month-label">Juillet</div>
+      <div class="month-body"><strong>📈 Bullish — Sommet de Mi-Année</strong><br>Tendance haussière vers un sommet estival de milieu d'année marquant la fin de la fenêtre Sell Watchlists.<br>⚠️ Éviter les profils hebdomadaires Seek &amp; Destroy durant juillet-août.</div>
+    </div>
+    <div class="month-row neutral" id="nq-aout">
+      <div class="month-label">Août</div>
+      <div class="month-body"><strong>↔️ Consolidation Estivale</strong><br>Mois sans direction claire et à faible probabilité (avec mars et juin) : réduire nettement le levier et la fréquence de trading.</div>
+    </div>
+    <div class="month-row warning" id="nq-sept">
+      <div class="month-label">Septembre</div>
+      <div class="month-body"><strong>⚖️📉 Mois Coupé en Deux</strong><br>• <strong>1re moitié :</strong> plutôt Bullish · <strong>2e moitié :</strong> nettement Bearish (peut forger de manière précoce le creux saisonnier du T4).</div>
+    </div>
+    <div class="month-row bullish" id="nq-oct">
+      <div class="month-label">Octobre</div>
+      <div class="month-body"><strong>🎯📈⭐ Creux Majeur d'Automne &amp; Rallye n°1 (Stock Mega-Trades)</strong><br>Scénario saisonnier n°1 sur les indices : point bas majeur du T4 (fin sept à nov) avant le rallye le plus rapide et puissant de l'année.</div>
+    </div>
+    <div class="month-row bullish" id="nq-nov">
+      <div class="month-label">Novembre</div>
+      <div class="month-body"><strong>📈 Bullish — Poursuite du Rallye d'Automne</strong><br>Poursuite franche de l'expansion haussière portée par les résultats du T3 et la dynamique de fin d'année.</div>
+    </div>
+    <div class="month-row bullish" id="nq-dec">
+      <div class="month-label">Décembre</div>
+      <div class="month-body"><strong>🎅📈 Bullish — Santa Claus Rally</strong><br>Mois haussier alimenté par le rallye des fêtes et les dépenses de consommation américaines.</div>
+    </div>
+    <div class="saison-rules-section">
+      <div class="regle-card">
+        <div class="regle-num">Règle n°1 — Nasdaq (NQ)</div>
+        <div class="regle-title">Le Filtre Obligataire (ZB / ZN)</div>
+        <div class="regle-body">Corrélation positive long terme (décalage 6-12 mois) : <span class="ok">ZB monte (taux bas) → soutient NQ</span> · <span class="ko">ZB baisse durablement → pèse sur NQ</span>. À court terme, surveiller l'alternance <strong>Risk On / Risk Off</strong>.</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Règle n°2 — Nasdaq (NQ)</div>
+        <div class="regle-title">Exploiter le Biais Tech via la SMT des 3 Indices (NQ / ES / YM)</div>
+        <div class="regle-body">Accumulation : NQ forme un Higher Low (ou balaie les stops) pendant que ES et YM tiennent leurs creux.<br>• <strong>Scan intraday SMT :</strong> 5h00–9h30 NY (AM Trend) et 12h00–15h00 NY (PM Trend).</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Règle n°3 — Nasdaq (NQ)</div>
+        <div class="regle-title">Adapter la Saisonnalité au Régime de Fond</div>
+        <div class="regle-body">• <strong>Marché haussier :</strong> privilégier Février-Mai et Octobre-Décembre.<br>• <strong>Marché baissier :</strong> Janvier, Mai et 2e moitié de Septembre deviennent les fenêtres de vente les plus explosives.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOW JONES (YM) -->
+  <div class="saison-panel" id="panel-ym">
+    <div class="month-row bearish" id="ym-jan">
+      <div class="month-label">Janvier</div>
+      <div class="month-body"><strong>📉 Bearish / Référence d'Accumulation</strong><br>Fenêtre de vente à découvert en marché baissier ; creux de référence en marché haussier avant le décollage de février-mai.</div>
+    </div>
+    <div class="month-row bullish" id="ym-fev">
+      <div class="month-label">Février</div>
+      <div class="month-body"><strong>📈⭐ Bullish — Lancement du Printemps</strong><br>Ouvre la grande fenêtre haussière Février → Mai avec divergences SMT entre Dow, S&amp;P 500 et Nasdaq (jours 2-3 et 6-8).</div>
+    </div>
+    <div class="month-row neutral" id="ym-mars">
+      <div class="month-label">Mars</div>
+      <div class="month-body"><strong>↔️ Consolidation — Mois Peu Fructueux</strong><br>L'un des 3 mois les moins fructueux (avec juin et août) : whipsaws avec pression baissière semaines 2-3 puis rebond vers la clôture.</div>
+    </div>
+    <div class="month-row bullish" id="ym-avr">
+      <div class="month-label">Avril</div>
+      <div class="month-body"><strong>📈 Bullish — Accélération de Printemps</strong><br>Début hésitant puis forte accélération haussière jusqu'à fin avril.</div>
+    </div>
+    <div class="month-row bearish" id="ym-mai">
+      <div class="month-label">Mai</div>
+      <div class="month-body"><strong>📉 Bearish — Entrée en Faible Magnitude</strong><br>Début de la période de faible magnitude (Mai → Octobre) et fenêtre Sell Watchlists (Mai → Juillet / mi-septembre).</div>
+    </div>
+    <div class="month-row bearish" id="ym-juin">
+      <div class="month-label">Juin</div>
+      <div class="month-body"><strong>↔️📉 Consolidation → Clôture Bearish</strong><br>Mois peu favorable (avec mars et août) au cœur de la fenêtre estivale de distribution Mai-Juillet.</div>
+    </div>
+    <div class="month-row bullish" id="ym-juil">
+      <div class="month-label">Juillet</div>
+      <div class="month-body"><strong>📈 Bullish — Sommet de Mi-Année</strong><br>Poussée haussière vers un sommet de milieu d'année marquant la fin de la fenêtre de distribution (éviter Seek &amp; Destroy en juillet-août).</div>
+    </div>
+    <div class="month-row neutral" id="ym-aout">
+      <div class="month-label">Août</div>
+      <div class="month-body"><strong>↔️ Consolidation Estivale</strong><br>Mois range-bound (avec mars et juin) : réduire nettement le levier et la fréquence de trading.</div>
+    </div>
+    <div class="month-row warning" id="ym-sept">
+      <div class="month-label">Septembre</div>
+      <div class="month-body"><strong>⚖️📉 Mois Coupé en Deux</strong><br>• <strong>1re moitié :</strong> plutôt Bullish · <strong>2e moitié :</strong> nettement Bearish (formation précoce possible du creux T4).</div>
+    </div>
+    <div class="month-row bullish" id="ym-oct">
+      <div class="month-label">Octobre</div>
+      <div class="month-body"><strong>🎯📈⭐ Creux Majeur du T4 &amp; Rallye n°1 (Stock Mega-Trades)</strong><br>Scénario saisonnier n°1 : point bas du T4 suivi de l'accélération haussière la plus puissante de l'année.</div>
+    </div>
+    <div class="month-row bullish" id="ym-nov">
+      <div class="month-label">Novembre</div>
+      <div class="month-body"><strong>📈 Bullish — Poursuite du Rallye d'Automne</strong><br>Poursuite franche du rallye haussier portée par les résultats du T3 et la dynamique de fin d'année.</div>
+    </div>
+    <div class="month-row bullish" id="ym-dec">
+      <div class="month-label">Décembre</div>
+      <div class="month-body"><strong>🎅📈 Bullish — Santa Claus Rally</strong><br>Mois haussier porté par le rallye des fêtes et les dépenses de consommation américaines.</div>
+    </div>
+    <div class="saison-rules-section">
+      <div class="regle-card">
+        <div class="regle-num">Règles n°1 &amp; n°2 — Dow Jones (YM)</div>
+        <div class="regle-title">Filtre Obligataire &amp; Dow Theory via Index SMT</div>
+        <div class="regle-body">• <strong>Filtre Obligataire (ZB / ZN) :</strong> corrélation positive long terme (6-12 mois) + basculement Risk On / Risk Off.<br>• <strong>Index SMT (Dow / S&amp;P 500 / Nasdaq) :</strong> scan swing journalier et intraday (5h00–9h30 NY pour AM Trend, 12h00–15h00 NY pour PM Trend).</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Règles n°3 &amp; n°4 — Dow Jones (YM)</div>
+        <div class="regle-title">Filtrer les 30 Valeurs du Dow ($DOWI) &amp; Régime de Fond</div>
+        <div class="regle-body">• <strong>Sélection d'actions ($DOWI en overlay) :</strong> écarter les valeurs défensives (Verizon, GE, Coca-Cola), cibler les leaders qui tiennent leurs creux (<em>Darlings / Dogs of the Dow</em>).<br>• <strong>Régime de fond :</strong> privilégier Fév-Mai et Oct-Déc en bull market ; Janvier, Mai et 2e moitié de Septembre en bear market.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S&P 500 (ES) -->
+  <div class="saison-panel" id="panel-es">
+    <div class="month-row bearish" id="es-jan">
+      <div class="month-label">Janvier</div>
+      <div class="month-body"><strong>📉 Bearish / Repère d'Accumulation</strong><br>Fenêtre de vente à découvert en marché baissier ; repère d'accumulation institutionnelle en marché haussier avant février.</div>
+    </div>
+    <div class="month-row bullish" id="es-fev">
+      <div class="month-label">Février</div>
+      <div class="month-body"><strong>📈⭐ Bullish — Lancement du Printemps</strong><br>Ouvre la première grande fenêtre haussière (Février → Mai) avec divergences SMT entre ES, NQ et YM (jours 2-3 et 6-8).</div>
+    </div>
+    <div class="month-row neutral" id="es-mars">
+      <div class="month-label">Mars</div>
+      <div class="month-body"><strong>↔️ Consolidation — Mois Peu Fructueux</strong><br>Mois range-bound (avec juin et août) : whipsaws avec pression baissière semaines 2-3 suivie d'un rebond en clôture.</div>
+    </div>
+    <div class="month-row bullish" id="es-avr">
+      <div class="month-label">Avril</div>
+      <div class="month-body"><strong>📈 Bullish — Accélération de Printemps</strong><br>Début hésitant puis forte hausse jusqu'à fin avril ; ES et NQ refusent souvent de marquer un nouveau plus bas face au Dow.</div>
+    </div>
+    <div class="month-row bearish" id="es-mai">
+      <div class="month-label">Mai</div>
+      <div class="month-body"><strong>📉 Bearish — Entrée en Faible Magnitude</strong><br>Ouverture de la période de faible magnitude (Mai → Octobre) et de la fenêtre de vente à découvert (Mai → Juillet / mi-septembre).</div>
+    </div>
+    <div class="month-row bearish" id="es-juin">
+      <div class="month-label">Juin</div>
+      <div class="month-body"><strong>↔️📉 Consolidation → Clôture Bearish</strong><br>Mois peu favorable (avec mars et août) : échec de ES et YM à faire un plus haut pendant que NQ en inscrit un = signal type de distribution institutionnelle.</div>
+    </div>
+    <div class="month-row bullish" id="es-juil">
+      <div class="month-label">Juillet</div>
+      <div class="month-body"><strong>📈 Bullish — Sommet de Mi-Année</strong><br>Poussée haussière vers le sommet de milieu d'année clôturant la fenêtre estivale de distribution (éviter Seek &amp; Destroy en juillet-août).</div>
+    </div>
+    <div class="month-row neutral" id="es-aout">
+      <div class="month-label">Août</div>
+      <div class="month-body"><strong>↔️ Consolidation Estivale</strong><br>Mois range-bound (avec mars et juin) : réduire nettement le levier et la fréquence de trading.</div>
+    </div>
+    <div class="month-row warning" id="es-sept">
+      <div class="month-label">Septembre</div>
+      <div class="month-body"><strong>⚖️📉 Mois Coupé en Deux</strong><br>• <strong>1re moitié :</strong> plutôt Bullish · <strong>2e moitié :</strong> nettement Bearish (formation précoce possible du creux T4).</div>
+    </div>
+    <div class="month-row bullish" id="es-oct">
+      <div class="month-label">Octobre</div>
+      <div class="month-body"><strong>🎯📈⭐ Creux Majeur du T4 &amp; Rallye n°1 (Stock Mega-Trades)</strong><br>Scénario saisonnier n°1 : point bas du T4 suivi de l'accélération haussière la plus rapide et ample de l'année.</div>
+    </div>
+    <div class="month-row bullish" id="es-nov">
+      <div class="month-label">Novembre</div>
+      <div class="month-body"><strong>📈 Bullish — Poursuite du Rallye d'Automne</strong><br>Poursuite franche du rallye haussier portée par les résultats du T3 et la dynamique de fin d'année.</div>
+    </div>
+    <div class="month-row bullish" id="es-dec">
+      <div class="month-label">Décembre</div>
+      <div class="month-body"><strong>🎅📈 Bullish — Santa Claus Rally</strong><br>Mois haussier porté par le rallye des fêtes et les dépenses de consommation américaines.</div>
+    </div>
+    <div class="saison-rules-section">
+      <div class="regle-card">
+        <div class="regle-num">Règles n°1 &amp; n°2 — S&amp;P 500 (ES)</div>
+        <div class="regle-title">Filtre Obligataire &amp; Exécution sur ES via Index SMT</div>
+        <div class="regle-body">• <strong>Filtre Obligataire (ZB / ZN) :</strong> corrélation positive long terme (6-12 mois) + basculement Risk On / Risk Off intraday.<br>• <strong>Exécution privilégiée sur ES :</strong> dès qu'une SMT apparaît entre ES, NQ et YM en AM (5h00–9h30 NY) ou PM (12h00–15h00 NY).</div>
+      </div>
+      <div class="regle-card">
+        <div class="regle-num">Règles n°3 &amp; n°4 — S&amp;P 500 (ES)</div>
+        <div class="regle-title">Les 8 Profils Projetés Journaliers &amp; Régime de Fond</div>
+        <div class="regle-body">• <strong>8 Profils Journaliers (ES) :</strong> <em>Two Session Up/Down Close, AM Rally PM Reversal, AM Decline PM Reversal, Consolidation AM/PM</em> (vigilance Seek &amp; Destroy les jours de NFP).<br>• <strong>Régime de fond :</strong> privilégier Fév-Mai et Oct-Déc en bull market ; Janvier, Mai et 2e moitié de Septembre en bear market.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ JOURNAL ══ -->
+<div class="view" id="view-journal">
+<div class="page-title">Journal de Trading</div>
+  <div id="journal-list"><div style="text-align:center;padding:60px 20px;color:var(--text-dim);font-size:13px;"><div style="font-size:32px;margin-bottom:12px;">📋</div>Aucune session enregistrée.</div></div>
+</div>
+
+<!-- ══ STATS ══ -->
+<div class="view" id="view-stats">
+<div class="page-title">Tableau de Bord</div>
+  <div class="stats-grid">
+    <div class="stat-card"><span class="stat-num" id="stat-entries">—</span><span class="stat-label">Sessions</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-trades">—</span><span class="stat-label">Trades pris</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-no-setup">—</span><span class="stat-label">No-Setup days</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-buy-pct">—</span><span class="stat-label">Sessions Buy</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-avg-prob">—</span><span class="stat-label">Prob. moy.</span></div>
+    <div class="stat-card"><span class="stat-num" id="stat-screenshots">—</span><span class="stat-label">Screenshots</span></div>
+  </div>
+
+  <div class="section-title">Discipline — 30 derniers jours</div>
+  <div class="card"><div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">Chaque point = session enregistrée</div><div class="streak-row" id="streak-row"></div></div>
+
+  <div class="section-title">Répartition Buy / Sell</div>
+  <div class="card">
+    <div style="height:16px;border-radius:100px;overflow:hidden;display:flex;margin:8px 0;">
+      <div id="bias-bar-buy" style="background:var(--buy);height:100%;transition:width 0.6s;width:0%"></div>
+      <div id="bias-bar-sell" style="background:var(--sell);height:100%;transition:width 0.6s;flex:1"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;margin-top:6px;">
+      <span style="color:var(--buy);" id="bias-buy-label">Buy: —</span>
+      <span style="color:var(--sell);" id="bias-sell-label">Sell: —</span>
+    </div>
+  </div>
+
+  <div class="section-title">Résumé Hebdomadaire</div>
+  <div id="weekly-summary-container"></div>
+  <button class="btn-export-week" onclick="exportWeekPDF()" style="width:100%;margin-top:4px;">📄 Exporter la semaine en PDF</button>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+    <button class="btn-sm btn-export-entry" onclick="exportJournalJSON()" style="padding:10px;text-align:center;">💾 Sauvegarder Backup (.json)</button>
+    <button class="btn-sm btn-export-entry" onclick="document.getElementById('import-json-input').click()" style="padding:10px;text-align:center;">📂 Restaurer Backup (.json)</button>
+    <input type="file" id="import-json-input" accept=".json,application/json" style="display:none;" onchange="importJournalJSON(event)">
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- MODAL journal -->
+<div id="modal-overlay">
+  <div id="modal">
+    <div class="modal-title">Enregistrer la Session<button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="grid-2">
+      <div class="input-group"><label class="input-label">Date</label><input type="date" class="input-field" id="j-date"></div>
+      <div class="input-group"><label class="input-label">Heure d'entrée</label><input type="time" class="input-field" id="j-time"></div>
+    </div>
+    <div class="grid-2">
+      <div class="input-group"><label class="input-label">Biais</label><select class="input-field" id="j-bias"><option value="">— Aucun —</option><option value="buy">Buy Program</option><option value="sell">Sell Program</option></select></div>
+      <div class="input-group"><label class="input-label">Actif tradé</label><select class="input-field" id="j-asset"><option value="GBPUSD">GBP/USD</option><option value="EURUSD">EUR/USD</option><option value="USDJPY">USD/JPY</option><option value="GBPJPY">GBP/JPY</option><option value="XAUUSD">XAU/USD (Gold)</option><option value="NAS100">NAS100</option><option value="SPX500">SPX500</option><option value="autre">Autre</option></select></div>
+    </div>
+    <div class="grid-2">
+      <div class="input-group"><label class="input-label">Setup trouvé ?</label><select class="input-field" id="j-setup"><option value="no">No Setup — Capital préservé</option><option value="yes">Setup valide — Trade pris</option><option value="partial">Partiel — Non exécuté</option></select></div>
+      <div class="input-group"><label class="input-label">Killzone</label><select class="input-field" id="j-kz"><option value="">—</option><option value="london">London Open</option><option value="ny">New York Open</option><option value="london-close">London Close</option></select></div>
+    </div>
+    <div class="input-group"><label class="input-label">Probabilité checklist (%)</label><input type="number" class="input-field" id="j-prob" placeholder="Rempli automatiquement" min="0" max="100" readonly style="cursor:default;opacity:0.7;"></div>
+    <!-- Cases cochées automatiques -->
+    <div class="journal-auto-section" id="j-auto-section">
+      <div class="journal-auto-title">✅ Cases cochées ce jour (auto)</div>
+      <div class="journal-auto-grid" id="j-auto-tags"></div>
+    </div>
+    <div class="section-title" style="margin-top:4px;">Niveaux du Trade</div>
+    <div class="grid-3">
+      <div class="input-group"><label class="input-label">Entrée</label><input type="number" class="input-field" id="j-entry" placeholder="1.2550" step="0.0001"></div>
+      <div class="input-group"><label class="input-label">Stop Loss</label><input type="number" class="input-field" id="j-sl" placeholder="1.2530" step="0.0001"></div>
+      <div class="input-group"><label class="input-label">TP1</label><input type="number" class="input-field" id="j-tp1" placeholder="1.2580" step="0.0001"></div>
+    </div>
+    <div class="grid-2">
+      <div class="input-group"><label class="input-label">P&L (pips)</label><input type="number" class="input-field" id="j-pnl" placeholder="ex. +22"></div>
+      <div class="input-group"><label class="input-label">Drawdown (%)</label><input type="number" class="input-field" id="j-dd" placeholder="ex. 0.5"></div>
+    </div>
+    <div class="input-group"><label class="input-label">Notes de session</label><textarea class="input-field" id="j-notes" placeholder="Contexte macro, confluences, émotions, leçons..."></textarea></div>
+    <div class="input-group">
+      <label class="input-label">Captures d'écran</label>
+      <div class="upload-zone" onclick="document.getElementById('j-files').click()">
+        <input type="file" id="j-files" accept="image/*" multiple onchange="previewFiles(event)">
+        <div class="upload-icon">📸</div>
+        <div>Cliquez pour ajouter des captures</div>
+        <div style="font-size:11px;margin-top:4px;color:var(--text-dim);">PNG · JPG · WebP</div>
+      </div>
+      <div id="file-preview" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;"></div>
+    </div>
+    <button class="btn-save" onclick="saveEntry()">Enregistrer la Session</button>
+  </div>
+</div>
+
+<button class="floating-cta" onclick="openModal()" title="Logger la session">＋ Logger Session</button>
+<div id="toast">Session enregistrée ✓</div>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
