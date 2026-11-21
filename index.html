@@ -53,7 +53,8 @@
       <span class="kz-dot"></span>
       <span id="kz-header-text">Hors KZ</span>
     </div>
-    <button class="btn-icon" id="theme-toggle" title="Thème">◐</button>
+    <button class="btn-icon active" id="zen-toggle" onclick="toggleZenParticles()" title="Ambiance Zen (Particules ON/OFF)">✨</button>
+    <button class="btn-icon" id="theme-toggle" title="Changer de thème">◐</button>
     <button class="btn-icon" id="btn-add-entry" title="Enregistrer session">+</button>
   </div>
 </div>
@@ -1585,8 +1586,9 @@
     <div class="mp-opts-row">
       <button class="mp-opt-btn" id="mp-shuffle-btn" onclick="mpToggleShuffle()" title="Aléatoire">⇄</button>
       <button class="mp-opt-btn" id="mp-repeat-btn" onclick="mpToggleRepeat()" title="Répéter">↻</button>
+      <button class="mp-opt-btn active" id="mp-zen-toggle" onclick="toggleZenParticles()" title="Ambiance Zen (Particules ON/OFF)">✨ Zen</button>
       <label class="mp-add-btn" title="Ajouter des musiques depuis votre ordinateur">
-        ＋ Ajouter musique
+        ＋ Musique
         <input type="file" id="mp-file-input" accept="audio/*" multiple style="display:none" onchange="mpAddFiles(this.files)">
       </label>
     </div>

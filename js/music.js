@@ -6,12 +6,23 @@
   let glowOrbs = [];
   let animFrameId = null;
   let mouse = { x: -1000, y: -1000, radius: 120 };
+  let particlesEnabled = localStorage.getItem('mw-zen-enabled') !== 'false';
+
+  let zenColors = {
+    primaryRgb: '232, 201, 122',
+    secondaryRgb: '201, 168, 76',
+    sparkRgb: '255, 248, 220'
+  };
 
   function initAmbientCanvas(){
     canvas = document.getElementById('zen-canvas');
     if(!canvas) return;
     ctx = canvas.getContext('2d');
     if(!ctx) return;
+
+    // Detect theme on start
+    const curTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('mw-theme') || 'dark';
+    window.updateZenThemeColors(curTheme);
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas, { passive: true });
@@ -26,28 +37,27 @@
       mouse.y = -1000;
     }, { passive: true });
 
-    // Create 55 gold stardust particles
+    // Create 60 stardust particles
     particles = [];
     const count = Math.min(65, Math.floor((window.innerWidth * window.innerHeight) / 22000) + 25);
     for(let i = 0; i < count; i++){
       particles.push(createParticle());
     }
 
-    // Create 4 ethereal background glow orbs
-    glowOrbs = [
-      { x: window.innerWidth * 0.2, y: window.innerHeight * 0.3, vx: 0.18, vy: 0.12, r: 160, color: 'rgba(201, 168, 76, 0.045)' },
-      { x: window.innerWidth * 0.8, y: window.innerHeight * 0.6, vx: -0.15, vy: -0.14, r: 210, color: 'rgba(201, 168, 76, 0.035)' },
-      { x: window.innerWidth * 0.5, y: window.innerHeight * 0.8, vx: 0.12, vy: -0.16, r: 180, color: 'rgba(46, 204, 113, 0.02)' },
-      { x: window.innerWidth * 0.85, y: window.innerHeight * 0.15, vx: -0.14, vy: 0.15, r: 140, color: 'rgba(232, 201, 122, 0.035)' }
-    ];
+    if(particlesEnabled){
+      canvas.style.display = 'block';
+      startAnimation();
+    } else {
+      canvas.style.display = 'none';
+    }
 
-    startAnimation();
+    syncZenButtonsUI();
 
     // Pause on hidden tab to save battery
     document.addEventListener('visibilitychange', () => {
       if(document.hidden){
         cancelAnimationFrame(animFrameId);
-      } else {
+      } else if(particlesEnabled){
         startAnimation();
       }
     });
@@ -78,9 +88,12 @@
 
   function startAnimation(){
     cancelAnimationFrame(animFrameId);
+    if(!particlesEnabled) return;
     function loop(){
       drawScene();
-      animFrameId = requestAnimationFrame(loop);
+      if(particlesEnabled){
+        animFrameId = requestAnimationFrame(loop);
+      }
     }
     loop();
   }
@@ -89,7 +102,7 @@
     if(!ctx || !canvas) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Draw ethereal background glow orbs
+    // 1. Draw background ambient glow orbs
     for(let i = 0; i < glowOrbs.length; i++){
       const orb = glowOrbs[i];
       orb.x += orb.vx;
@@ -110,13 +123,12 @@
     for(let i = 0; i < particles.length; i++){
       const p = particles[i];
 
-      // Update positions
       p.pulseAngle += p.pulseSpeed;
       p.swayAngle += p.swaySpeed;
       p.x += p.vx + Math.sin(p.swayAngle) * p.swayDist;
       p.y += p.vy;
 
-      // Mouse repulsion/wake effect
+      // Mouse gentle repulsion
       const dx = p.x - mouse.x;
       const dy = p.y - mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -132,14 +144,14 @@
         continue;
       }
 
-      // Calculate breathing alpha
+      // Breathing alpha
       const currentAlpha = Math.max(0.08, Math.min(0.9, p.baseAlpha + Math.sin(p.pulseAngle) * 0.25));
 
-      // Draw particle halo
+      // Draw particle halo with theme colors
       const glowGrad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2.8);
-      glowGrad.addColorStop(0, `rgba(232, 201, 122, ${currentAlpha})`);
-      glowGrad.addColorStop(0.5, `rgba(201, 168, 76, ${currentAlpha * 0.5})`);
-      glowGrad.addColorStop(1, 'rgba(201, 168, 76, 0)');
+      glowGrad.addColorStop(0, `rgba(${zenColors.primaryRgb}, ${currentAlpha})`);
+      glowGrad.addColorStop(0.5, `rgba(${zenColors.secondaryRgb}, ${currentAlpha * 0.5})`);
+      glowGrad.addColorStop(1, `rgba(${zenColors.secondaryRgb}, 0)`);
 
       ctx.fillStyle = glowGrad;
       ctx.beginPath();
@@ -147,11 +159,74 @@
       ctx.fill();
 
       // Sharp central spark
-      ctx.fillStyle = `rgba(255, 248, 220, ${Math.min(1, currentAlpha * 1.3)})`;
+      ctx.fillStyle = `rgba(${zenColors.sparkRgb}, ${Math.min(1, currentAlpha * 1.3)})`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size * 0.7, 0, Math.PI * 2);
       ctx.fill();
     }
+  }
+
+  // Hook to adapt zen particles to active theme
+  window.updateZenThemeColors = function(themeId){
+    const isIct = themeId && themeId.includes('ict');
+    if(isIct){
+      zenColors = {
+        primaryRgb: '105, 240, 174', // ICT Emerald / Mint
+        secondaryRgb: '0, 230, 118',  // ICT Green
+        sparkRgb: '255, 255, 255'     // Pure White
+      };
+      glowOrbs = [
+        { x: window.innerWidth * 0.2, y: window.innerHeight * 0.3, vx: 0.18, vy: 0.12, r: 160, color: 'rgba(0, 230, 118, 0.05)' },
+        { x: window.innerWidth * 0.8, y: window.innerHeight * 0.6, vx: -0.15, vy: -0.14, r: 210, color: 'rgba(16, 185, 129, 0.04)' },
+        { x: window.innerWidth * 0.5, y: window.innerHeight * 0.8, vx: 0.12, vy: -0.16, r: 180, color: 'rgba(255, 255, 255, 0.025)' },
+        { x: window.innerWidth * 0.85, y: window.innerHeight * 0.15, vx: -0.14, vy: 0.15, r: 140, color: 'rgba(105, 240, 174, 0.04)' }
+      ];
+    } else {
+      zenColors = {
+        primaryRgb: '232, 201, 122', // Gold Light
+        secondaryRgb: '201, 168, 76',  // Gold
+        sparkRgb: '255, 248, 220'     // Warm White
+      };
+      glowOrbs = [
+        { x: window.innerWidth * 0.2, y: window.innerHeight * 0.3, vx: 0.18, vy: 0.12, r: 160, color: 'rgba(201, 168, 76, 0.045)' },
+        { x: window.innerWidth * 0.8, y: window.innerHeight * 0.6, vx: -0.15, vy: -0.14, r: 210, color: 'rgba(201, 168, 76, 0.035)' },
+        { x: window.innerWidth * 0.5, y: window.innerHeight * 0.8, vx: 0.12, vy: -0.16, r: 180, color: 'rgba(46, 204, 113, 0.02)' },
+        { x: window.innerWidth * 0.85, y: window.innerHeight * 0.15, vx: -0.14, vy: 0.15, r: 140, color: 'rgba(232, 201, 122, 0.035)' }
+      ];
+    }
+  };
+
+  // Toggle Zen Particles ON/OFF
+  window.toggleZenParticles = function(){
+    particlesEnabled = !particlesEnabled;
+    localStorage.setItem('mw-zen-enabled', particlesEnabled ? 'true' : 'false');
+    if(canvas){
+      canvas.style.display = particlesEnabled ? 'block' : 'none';
+    }
+    if(particlesEnabled){
+      startAnimation();
+    } else {
+      cancelAnimationFrame(animFrameId);
+      if(ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    syncZenButtonsUI();
+    if(typeof showToast === 'function'){
+      showToast(particlesEnabled ? 'Ambiance Zen activée ✨' : 'Ambiance Zen désactivée ⏸️');
+    }
+  };
+
+  function syncZenButtonsUI(){
+    const btns = [document.getElementById('zen-toggle'), document.getElementById('mp-zen-toggle')];
+    btns.forEach(b => {
+      if(!b) return;
+      b.classList.toggle('active', particlesEnabled);
+      if(b.id === 'zen-toggle'){
+        b.innerHTML = particlesEnabled ? '✨' : '💤';
+        b.title = particlesEnabled ? 'Ambiance Zen active (Cliquer pour désactiver)' : 'Ambiance Zen en pause (Cliquer pour activer)';
+      } else if(b.id === 'mp-zen-toggle'){
+        b.innerHTML = particlesEnabled ? '✨ Zen' : '💤 Zen Off';
+      }
+    });
   }
 
   // ── 2. AUDIO PLAYER & LOCAL LIBRARY ENGINE ──
@@ -288,6 +363,7 @@
 
     loadTrack(0, false);
     renderPlaylist();
+    syncZenButtonsUI();
   }
 
   function formatTime(sec){
@@ -501,7 +577,7 @@
     }
   };
 
-  // ── 3. ROBUST STARTUP (No DOMContentLoaded race condition) ──
+  // ── 3. ROBUST STARTUP ──
   function boot(){
     initAmbientCanvas();
     initDB().then(() => {

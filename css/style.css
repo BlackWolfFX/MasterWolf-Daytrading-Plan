@@ -1,5 +1,7 @@
 :root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9A7230;--gold-glow:rgba(201,168,76,0.18);--gold-border:rgba(201,168,76,0.35);--bg:#0A0A0A;--bg-card:#111111;--bg-elevated:#161616;--bg-input:#1A1A1A;--text:#F0EDE6;--text-muted:#7A7570;--text-dim:#4A4540;--buy:#2ECC71;--buy-dim:rgba(46,204,113,0.15);--sell:#E74C3C;--sell-dim:rgba(231,76,60,0.15);--radius:6px;--transition:0.28s cubic-bezier(0.4,0,0.2,1);color-scheme:dark;--header-h:64px;--nav-h:48px;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px)}
 [data-theme="light"]{--bg:#F5F2ED;--bg-card:#FFFFFF;--bg-elevated:#ECECEC;--bg-input:#F0EDE6;--text:#1A1510;--text-muted:#7A7060;--text-dim:#BCBAB5;--gold-glow:rgba(201,168,76,0.12);--gold-border:rgba(154,114,48,0.3);color-scheme:light}
+[data-theme="ict-dark"]{--gold:#00E676;--gold-light:#69F0AE;--gold-dark:#00B248;--gold-glow:rgba(0,230,118,0.18);--gold-border:rgba(0,230,118,0.35);--bg:#060B08;--bg-card:#0B140E;--bg-elevated:#111D15;--bg-input:#15241A;--text:#FFFFFF;--text-muted:#95B79F;--text-dim:#4B6E55;--buy:#00E676;--buy-dim:rgba(0,230,118,0.18);--sell:#FF5252;--sell-dim:rgba(255,82,82,0.18);color-scheme:dark}
+[data-theme="ict-light"]{--gold:#0A7D42;--gold-light:#109B53;--gold-dark:#06542C;--gold-glow:rgba(10,125,66,0.14);--gold-border:rgba(10,125,66,0.28);--bg:#F1F7F3;--bg-card:#FFFFFF;--bg-elevated:#E5EFE8;--bg-input:#ECF4EE;--text:#081C0F;--text-muted:#385A43;--text-dim:#7E9F88;--buy:#0A7D42;--buy-dim:rgba(10,125,66,0.14);--sell:#D32F2F;--sell-dim:rgba(211,47,47,0.14);color-scheme:light}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#F5F2ED;--bg-card:#FFFFFF;--bg-elevated:#ECECEC;--bg-input:#F0EDE6;--text:#1A1510;--text-muted:#7A7060;--text-dim:#BCBAB5;--gold-glow:rgba(201,168,76,0.12);--gold-border:rgba(154,114,48,0.3);color-scheme:light}}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -11,6 +13,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .header-actions{display:flex;align-items:center;gap:8px}
 .btn-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:none;border:1px solid var(--gold-border);border-radius:var(--radius);cursor:pointer;color:var(--text-muted);font-size:14px;transition:var(--transition)}
 .btn-icon:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-glow)}
+#zen-toggle.active{border-color:var(--gold);color:var(--gold);background:var(--gold-glow);box-shadow:0 0 10px var(--gold-glow)}
+#zen-toggle:not(.active){opacity:0.45;border-color:rgba(255,255,255,0.15)}
 .date-badge{font-size:11px;font-weight:500;letter-spacing:0.06em;color:var(--text-muted);padding:4px 10px;border:1px solid var(--gold-border);border-radius:20px}
 
 /* KILLZONE BADGE */

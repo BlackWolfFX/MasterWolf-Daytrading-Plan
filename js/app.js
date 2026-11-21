@@ -340,14 +340,47 @@ function updateKillzone(){
 
 function pad(n){return String(Math.floor(n)).padStart(2,'0')}
 
-// ══ THEME ══
-function loadTheme(){const t=localStorage.getItem('mw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}
-document.getElementById('theme-toggle').addEventListener('click',()=>{
-  const cur=document.documentElement.getAttribute('data-theme');
-  const next=cur==='dark'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',next);
-  localStorage.setItem('mw-theme',next);
-});
+// ══ THEMES & STYLES ══
+const THEMES = [
+  { id: 'dark', icon: '🌙', name: 'MasterWolf Dark Gold' },
+  { id: 'ict-dark', icon: '⚡', name: 'ICT Mode Dark (Green & White)' },
+  { id: 'light', icon: '☀️', name: 'MasterWolf Light Gold' },
+  { id: 'ict-light', icon: '🌿', name: 'ICT Mode White (Green & Dark)' }
+];
+
+function loadTheme(){
+  const saved = localStorage.getItem('mw-theme') || 'dark';
+  applyTheme(saved, false);
+}
+
+function applyTheme(themeId, showNotification = true){
+  const found = THEMES.find(th => th.id === themeId) || THEMES[0];
+  document.documentElement.setAttribute('data-theme', found.id);
+  localStorage.setItem('mw-theme', found.id);
+  const btn = document.getElementById('theme-toggle');
+  if(btn){
+    btn.innerHTML = found.icon;
+    btn.title = `Thème : ${found.name} (Cliquer pour changer)`;
+  }
+  if(typeof window.updateZenThemeColors === 'function'){
+    window.updateZenThemeColors(found.id);
+  }
+  if(showNotification && typeof showToast === 'function'){
+    showToast(`Thème : ${found.name} ${found.icon}`);
+  }
+}
+
+function cycleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const curIdx = THEMES.findIndex(th => th.id === cur);
+  const nextIdx = (curIdx + 1) % THEMES.length;
+  applyTheme(THEMES[nextIdx].id, true);
+}
+
+const themeToggleBtn = document.getElementById('theme-toggle');
+if(themeToggleBtn){
+  themeToggleBtn.addEventListener('click', cycleTheme);
+}
 
 // ══ NAV ══
 document.querySelectorAll('.nav-tab').forEach(tab=>{
