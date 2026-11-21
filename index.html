@@ -1543,8 +1543,65 @@
 <button class="floating-cta" onclick="openModal()" title="Logger la session">＋ Logger Session</button>
 <div id="toast">Session enregistrée ✓</div>
 
+<!-- ══ ZEN AMBIENT PARTICLES ══ -->
+<div id="zen-particles" aria-hidden="true"></div>
+
+<!-- ══ MUSIC PLAYER ══ -->
+<div id="music-player" class="mp-minimized">
+  <!-- Barre compacte toujours visible -->
+  <div class="mp-topbar">
+    <div class="mp-eq" id="mp-eq">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="mp-track-info" onclick="toggleMusicPanel()">
+      <div class="mp-track-name" id="mp-track-name">Solo Leveling OST</div>
+      <div class="mp-track-artist" id="mp-track-artist">MasterWolf Zen</div>
+    </div>
+    <div class="mp-controls-inline">
+      <button class="mp-btn" onclick="mpPrev()" title="Précédent">⏮</button>
+      <button class="mp-btn mp-play-btn" id="mp-play-btn" onclick="mpTogglePlay()" title="Play/Pause">▶</button>
+      <button class="mp-btn" onclick="mpNext()" title="Suivant">⏭</button>
+    </div>
+    <button class="mp-btn mp-toggle-btn" onclick="toggleMusicPanel()" title="Ouvrir/Fermer">▾</button>
+  </div>
+
+  <!-- Panneau étendu -->
+  <div class="mp-panel" id="mp-panel">
+    <!-- Barre de progression -->
+    <div class="mp-progress-wrap">
+      <span class="mp-time" id="mp-elapsed">0:00</span>
+      <input type="range" class="mp-progress" id="mp-progress" value="0" min="0" max="100" step="0.1" oninput="mpSeek(this.value)">
+      <span class="mp-time" id="mp-duration">0:00</span>
+    </div>
+
+    <!-- Volume -->
+    <div class="mp-volume-row">
+      <span class="mp-vol-icon" id="mp-vol-icon" onclick="mpToggleMute()">🔊</span>
+      <input type="range" class="mp-volume" id="mp-volume" value="70" min="0" max="100" oninput="mpSetVolume(this.value)">
+      <span class="mp-vol-pct" id="mp-vol-pct">70%</span>
+    </div>
+
+    <!-- Options lecture -->
+    <div class="mp-opts-row">
+      <button class="mp-opt-btn" id="mp-shuffle-btn" onclick="mpToggleShuffle()" title="Aléatoire">⇄</button>
+      <button class="mp-opt-btn" id="mp-repeat-btn" onclick="mpToggleRepeat()" title="Répéter">↻</button>
+      <label class="mp-add-btn" title="Ajouter des musiques depuis votre ordinateur">
+        ＋ Ajouter musique
+        <input type="file" id="mp-file-input" accept="audio/*" multiple style="display:none" onchange="mpAddFiles(this.files)">
+      </label>
+    </div>
+
+    <!-- Playlist -->
+    <div class="mp-playlist-wrap">
+      <div class="mp-playlist-title">🎵 PLAYLIST</div>
+      <div class="mp-playlist" id="mp-playlist"></div>
+    </div>
+  </div>
+</div>
+
 <script src="js/app.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/music.js"></script>
 
 </body>
 </html>
