@@ -1,5 +1,5 @@
 // ══ THE MASTERWOLF ICT PLAN — Zen Audio Player & Ambient Canvas Engine ══
-(function(){
+(function () {
   // ── 1. AMBIENT ZEN CANVAS PARTICLES ENGINE ──
   let canvas, ctx;
   let particles = [];
@@ -14,11 +14,11 @@
     sparkRgb: '255, 248, 220'
   };
 
-  function initAmbientCanvas(){
+  function initAmbientCanvas() {
     canvas = document.getElementById('zen-canvas');
-    if(!canvas) return;
+    if (!canvas) return;
     ctx = canvas.getContext('2d');
-    if(!ctx) return;
+    if (!ctx) return;
 
     // Detect theme on start
     const curTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('mw-theme') || 'dark';
@@ -40,11 +40,11 @@
     // Create 60 stardust particles
     particles = [];
     const count = Math.min(65, Math.floor((window.innerWidth * window.innerHeight) / 22000) + 25);
-    for(let i = 0; i < count; i++){
+    for (let i = 0; i < count; i++) {
       particles.push(createParticle());
     }
 
-    if(particlesEnabled){
+    if (particlesEnabled) {
       canvas.style.display = 'block';
       startAnimation();
     } else {
@@ -55,21 +55,21 @@
 
     // Pause on hidden tab to save battery
     document.addEventListener('visibilitychange', () => {
-      if(document.hidden){
+      if (document.hidden) {
         cancelAnimationFrame(animFrameId);
-      } else if(particlesEnabled){
+      } else if (particlesEnabled) {
         startAnimation();
       }
     });
   }
 
-  function resizeCanvas(){
-    if(!canvas) return;
+  function resizeCanvas() {
+    if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
 
-  function createParticle(initial = true){
+  function createParticle(initial = true) {
     return {
       x: Math.random() * window.innerWidth,
       y: initial ? Math.random() * window.innerHeight : window.innerHeight + 10,
@@ -86,29 +86,29 @@
     };
   }
 
-  function startAnimation(){
+  function startAnimation() {
     cancelAnimationFrame(animFrameId);
-    if(!particlesEnabled) return;
-    function loop(){
+    if (!particlesEnabled) return;
+    function loop() {
       drawScene();
-      if(particlesEnabled){
+      if (particlesEnabled) {
         animFrameId = requestAnimationFrame(loop);
       }
     }
     loop();
   }
 
-  function drawScene(){
-    if(!ctx || !canvas) return;
+  function drawScene() {
+    if (!ctx || !canvas) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // 1. Draw background ambient glow orbs
-    for(let i = 0; i < glowOrbs.length; i++){
+    for (let i = 0; i < glowOrbs.length; i++) {
       const orb = glowOrbs[i];
       orb.x += orb.vx;
       orb.y += orb.vy;
-      if(orb.x < -100 || orb.x > canvas.width + 100) orb.vx *= -1;
-      if(orb.y < -100 || orb.y > canvas.height + 100) orb.vy *= -1;
+      if (orb.x < -100 || orb.x > canvas.width + 100) orb.vx *= -1;
+      if (orb.y < -100 || orb.y > canvas.height + 100) orb.vy *= -1;
 
       const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.r);
       grad.addColorStop(0, orb.color);
@@ -120,7 +120,7 @@
     }
 
     // 2. Draw stardust particles
-    for(let i = 0; i < particles.length; i++){
+    for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
 
       p.pulseAngle += p.pulseSpeed;
@@ -132,14 +132,14 @@
       const dx = p.x - mouse.x;
       const dy = p.y - mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if(dist < mouse.radius && dist > 0){
+      if (dist < mouse.radius && dist > 0) {
         const force = (1 - dist / mouse.radius) * 1.5;
         p.x += (dx / dist) * force;
         p.y += (dy / dist) * force;
       }
 
       // Recycle when leaving screen
-      if(p.y < -20 || p.x < -20 || p.x > canvas.width + 20){
+      if (p.y < -20 || p.x < -20 || p.x > canvas.width + 20) {
         particles[i] = createParticle(false);
         continue;
       }
@@ -167,9 +167,9 @@
   }
 
   // Hook to adapt zen particles to active theme
-  window.updateZenThemeColors = function(themeId){
+  window.updateZenThemeColors = function (themeId) {
     const isIct = themeId && themeId.includes('ict');
-    if(isIct){
+    if (isIct) {
       zenColors = {
         primaryRgb: '105, 240, 174', // ICT Emerald / Mint
         secondaryRgb: '0, 230, 118',  // ICT Green
@@ -197,33 +197,33 @@
   };
 
   // Toggle Zen Particles ON/OFF
-  window.toggleZenParticles = function(){
+  window.toggleZenParticles = function () {
     particlesEnabled = !particlesEnabled;
     localStorage.setItem('mw-zen-enabled', particlesEnabled ? 'true' : 'false');
-    if(canvas){
+    if (canvas) {
       canvas.style.display = particlesEnabled ? 'block' : 'none';
     }
-    if(particlesEnabled){
+    if (particlesEnabled) {
       startAnimation();
     } else {
       cancelAnimationFrame(animFrameId);
-      if(ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     syncZenButtonsUI();
-    if(typeof showToast === 'function'){
+    if (typeof showToast === 'function') {
       showToast(particlesEnabled ? 'Ambiance Zen activée ✨' : 'Ambiance Zen désactivée ⏸️');
     }
   };
 
-  function syncZenButtonsUI(){
+  function syncZenButtonsUI() {
     const btns = [document.getElementById('zen-toggle'), document.getElementById('mp-zen-toggle')];
     btns.forEach(b => {
-      if(!b) return;
+      if (!b) return;
       b.classList.toggle('active', particlesEnabled);
-      if(b.id === 'zen-toggle'){
+      if (b.id === 'zen-toggle') {
         b.innerHTML = particlesEnabled ? '✨' : '💤';
         b.title = particlesEnabled ? 'Ambiance Zen active (Cliquer pour désactiver)' : 'Ambiance Zen en pause (Cliquer pour activer)';
-      } else if(b.id === 'mp-zen-toggle'){
+      } else if (b.id === 'mp-zen-toggle') {
         b.innerHTML = particlesEnabled ? '✨ Zen' : '💤 Zen Off';
       }
     });
@@ -252,13 +252,13 @@
   const audio = new Audio();
   audio.preload = 'metadata';
 
-  function initDB(){
+  function initDB() {
     return new Promise((resolve) => {
       try {
         const req = indexedDB.open(DB_NAME, 1);
         req.onupgradeneeded = (e) => {
           const d = e.target.result;
-          if(!d.objectStoreNames.contains(STORE_NAME)){
+          if (!d.objectStoreNames.contains(STORE_NAME)) {
             d.createObjectStore(STORE_NAME, { keyPath: 'id' });
           }
         };
@@ -267,15 +267,15 @@
           loadSavedCustomTracks().then(resolve);
         };
         req.onerror = () => resolve();
-      } catch(e) {
+      } catch (e) {
         resolve();
       }
     });
   }
 
-  function loadSavedCustomTracks(){
+  function loadSavedCustomTracks() {
     return new Promise((resolve) => {
-      if(!db) return resolve();
+      if (!db) return resolve();
       try {
         const tx = db.transaction(STORE_NAME, 'readonly');
         const store = tx.objectStore(STORE_NAME);
@@ -296,14 +296,14 @@
           resolve();
         };
         req.onerror = () => resolve();
-      } catch(e) {
+      } catch (e) {
         resolve();
       }
     });
   }
 
-  function saveTrackToDB(trackObj){
-    if(!db) return;
+  function saveTrackToDB(trackObj) {
+    if (!db) return;
     try {
       const tx = db.transaction(STORE_NAME, 'readwrite');
       const store = tx.objectStore(STORE_NAME);
@@ -313,21 +313,21 @@
         artist: trackObj.artist,
         blob: trackObj.blob
       });
-    } catch(e){}
+    } catch (e) { }
   }
 
-  function deleteTrackFromDB(id){
-    if(!db) return;
+  function deleteTrackFromDB(id) {
+    if (!db) return;
     try {
       const tx = db.transaction(STORE_NAME, 'readwrite');
       const store = tx.objectStore(STORE_NAME);
       store.delete(id);
-    } catch(e){}
+    } catch (e) { }
   }
 
   let elPlayer, elTrackName, elTrackArtist, elPlayBtn, elEq, elProgress, elElapsed, elDuration, elVolume, elVolPct, elVolIcon, elPlaylist;
 
-  function initPlayerDOM(){
+  function initPlayerDOM() {
     elPlayer = document.getElementById('music-player');
     elTrackName = document.getElementById('mp-track-name');
     elTrackArtist = document.getElementById('mp-track-artist');
@@ -342,11 +342,11 @@
     elPlaylist = document.getElementById('mp-playlist');
 
     const savedVol = localStorage.getItem('mw-audio-volume');
-    if(savedVol !== null){
+    if (savedVol !== null) {
       const v = parseFloat(savedVol);
       audio.volume = v;
-      if(elVolume) elVolume.value = Math.round(v * 100);
-      if(elVolPct) elVolPct.textContent = Math.round(v * 100) + '%';
+      if (elVolume) elVolume.value = Math.round(v * 100);
+      if (elVolPct) elVolPct.textContent = Math.round(v * 100) + '%';
     } else {
       audio.volume = 0.7;
     }
@@ -366,30 +366,30 @@
     syncZenButtonsUI();
   }
 
-  function formatTime(sec){
-    if(isNaN(sec) || !isFinite(sec)) return '0:00';
+  function formatTime(sec) {
+    if (isNaN(sec) || !isFinite(sec)) return '0:00';
     const m = Math.floor(sec / 60);
     const s = Math.floor(sec % 60);
     return `${m}:${s < 10 ? '0' : ''}${s}`;
   }
 
-  function loadTrack(index, autoPlay = true){
-    if(!playlist.length) return;
-    if(index < 0) index = playlist.length - 1;
-    if(index >= playlist.length) index = 0;
+  function loadTrack(index, autoPlay = true) {
+    if (!playlist.length) return;
+    if (index < 0) index = playlist.length - 1;
+    if (index >= playlist.length) index = 0;
     currentIndex = index;
     const track = playlist[currentIndex];
 
     audio.src = track.src;
-    if(elTrackName) elTrackName.textContent = track.title;
-    if(elTrackArtist) elTrackArtist.textContent = track.artist;
-    if(elElapsed) elElapsed.textContent = '0:00';
-    if(elDuration) elDuration.textContent = '0:00';
-    if(elProgress) elProgress.value = 0;
+    if (elTrackName) elTrackName.textContent = track.title;
+    if (elTrackArtist) elTrackArtist.textContent = track.artist;
+    if (elElapsed) elElapsed.textContent = '0:00';
+    if (elDuration) elDuration.textContent = '0:00';
+    if (elProgress) elProgress.value = 0;
 
     renderPlaylist();
 
-    if(autoPlay){
+    if (autoPlay) {
       audio.play().then(() => {
         setPlayingUI(true);
       }).catch(() => {
@@ -398,30 +398,30 @@
     }
   }
 
-  function setPlayingUI(playing){
+  function setPlayingUI(playing) {
     isPlaying = playing;
-    if(elPlayBtn) elPlayBtn.innerHTML = playing ? '⏸' : '▶';
-    if(elEq) elEq.classList.toggle('playing', playing);
+    if (elPlayBtn) elPlayBtn.innerHTML = playing ? '⏸' : '▶';
+    if (elEq) elEq.classList.toggle('playing', playing);
   }
 
-  function onLoadedMetadata(){
-    if(elDuration) elDuration.textContent = formatTime(audio.duration);
+  function onLoadedMetadata() {
+    if (elDuration) elDuration.textContent = formatTime(audio.duration);
   }
 
-  function updateProgress(){
-    if(!audio.duration || isNaN(audio.duration)) return;
+  function updateProgress() {
+    if (!audio.duration || isNaN(audio.duration)) return;
     const pct = (audio.currentTime / audio.duration) * 100;
-    if(elProgress) elProgress.value = pct;
-    if(elElapsed) elElapsed.textContent = formatTime(audio.currentTime);
+    if (elProgress) elProgress.value = pct;
+    if (elElapsed) elElapsed.textContent = formatTime(audio.currentTime);
   }
 
-  function onTrackEnded(){
-    if(isRepeat){
+  function onTrackEnded() {
+    if (isRepeat) {
       audio.currentTime = 0;
       audio.play();
-    } else if(isShuffle){
+    } else if (isShuffle) {
       let nextIdx = Math.floor(Math.random() * playlist.length);
-      if(playlist.length > 1 && nextIdx === currentIndex){
+      if (playlist.length > 1 && nextIdx === currentIndex) {
         nextIdx = (currentIndex + 1) % playlist.length;
       }
       loadTrack(nextIdx, true);
@@ -430,8 +430,8 @@
     }
   }
 
-  function renderPlaylist(){
-    if(!elPlaylist) return;
+  function renderPlaylist() {
+    if (!elPlaylist) return;
     elPlaylist.innerHTML = playlist.map((t, idx) => `
       <div class="mp-playlist-item ${idx === currentIndex ? 'active' : ''}" onclick="window.mpPlayIndex(${idx})">
         <span class="mp-item-num">${idx === currentIndex && isPlaying ? '🔊' : (idx + 1)}</span>
@@ -445,18 +445,18 @@
   }
 
   // Window functions for UI bindings
-  window.toggleMusicPanel = function(){
-    if(!elPlayer) return;
+  window.toggleMusicPanel = function () {
+    if (!elPlayer) return;
     elPlayer.classList.toggle('mp-expanded');
     elPlayer.classList.toggle('mp-minimized');
     const toggleBtn = elPlayer.querySelector('.mp-toggle-btn');
-    if(toggleBtn){
+    if (toggleBtn) {
       toggleBtn.textContent = elPlayer.classList.contains('mp-expanded') ? '▴' : '▾';
     }
   };
 
-  window.mpTogglePlay = function(){
-    if(audio.paused){
+  window.mpTogglePlay = function () {
+    if (audio.paused) {
       audio.play().then(() => {
         setPlayingUI(true);
       }).catch(err => {
@@ -468,62 +468,62 @@
     }
   };
 
-  window.mpPrev = function(){
+  window.mpPrev = function () {
     loadTrack(currentIndex - 1, true);
   };
 
-  window.mpNext = function(){
+  window.mpNext = function () {
     loadTrack(currentIndex + 1, true);
   };
 
-  window.mpPlayIndex = function(idx){
+  window.mpPlayIndex = function (idx) {
     loadTrack(idx, true);
   };
 
-  window.mpSeek = function(val){
-    if(!audio.duration || isNaN(audio.duration)) return;
+  window.mpSeek = function (val) {
+    if (!audio.duration || isNaN(audio.duration)) return;
     audio.currentTime = (val / 100) * audio.duration;
   };
 
-  window.mpSetVolume = function(val){
+  window.mpSetVolume = function (val) {
     const v = val / 100;
     audio.volume = v;
     localStorage.setItem('mw-audio-volume', v);
-    if(elVolPct) elVolPct.textContent = Math.round(val) + '%';
-    if(elVolIcon){
-      if(v === 0) elVolIcon.textContent = '🔇';
-      else if(v < 0.4) elVolIcon.textContent = '🔉';
+    if (elVolPct) elVolPct.textContent = Math.round(val) + '%';
+    if (elVolIcon) {
+      if (v === 0) elVolIcon.textContent = '🔇';
+      else if (v < 0.4) elVolIcon.textContent = '🔉';
       else elVolIcon.textContent = '🔊';
     }
   };
 
-  window.mpToggleMute = function(){
-    if(audio.volume > 0){
+  window.mpToggleMute = function () {
+    if (audio.volume > 0) {
       audio.dataset.prevVol = audio.volume;
       window.mpSetVolume(0);
-      if(elVolume) elVolume.value = 0;
+      if (elVolume) elVolume.value = 0;
     } else {
       const prev = parseFloat(audio.dataset.prevVol || '0.7') * 100;
       window.mpSetVolume(prev);
-      if(elVolume) elVolume.value = prev;
+      if (elVolume) elVolume.value = prev;
     }
   };
 
-  window.mpToggleShuffle = function(){
+  window.mpToggleShuffle = function () {
     isShuffle = !isShuffle;
     const btn = document.getElementById('mp-shuffle-btn');
-    if(btn) btn.classList.toggle('active', isShuffle);
+    if (btn) btn.classList.toggle('active', isShuffle);
   };
 
-  window.mpToggleRepeat = function(){
+  window.mpToggleRepeat = function () {
     isRepeat = !isRepeat;
     const btn = document.getElementById('mp-repeat-btn');
-    if(btn) btn.classList.toggle('active', isRepeat);
+    if (btn) btn.classList.toggle('active', isRepeat);
   };
 
-  window.mpAddFiles = function(files){
-    if(!files || !files.length) return;
-    for(let i = 0; i < files.length; i++){
+  window.mpAddFiles = function (files) {
+    if (!files || !files.length) return;
+    for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const trackId = 'custom_' + Date.now() + '_' + i;
       const cleanName = file.name.replace(/\.[^/.]+$/, "");
@@ -543,42 +543,42 @@
     }
 
     renderPlaylist();
-    if(typeof showToast === 'function'){
+    if (typeof showToast === 'function') {
       showToast(`🎵 ${files.length} musique(s) ajoutée(s) avec succès !`);
     }
 
-    if(audio.paused && playlist.length > 1){
+    if (audio.paused && playlist.length > 1) {
       loadTrack(playlist.length - files.length, true);
     }
   };
 
-  window.mpDeleteTrack = function(id){
+  window.mpDeleteTrack = function (id) {
     const idx = playlist.findIndex(t => t.id === id);
-    if(idx === -1) return;
+    if (idx === -1) return;
 
     deleteTrackFromDB(id);
     playlist.splice(idx, 1);
 
-    if(idx === currentIndex){
-      if(playlist.length){
+    if (idx === currentIndex) {
+      if (playlist.length) {
         loadTrack(Math.min(idx, playlist.length - 1), isPlaying);
       } else {
         audio.pause();
         audio.src = '';
         setPlayingUI(false);
       }
-    } else if(idx < currentIndex){
+    } else if (idx < currentIndex) {
       currentIndex--;
     }
 
     renderPlaylist();
-    if(typeof showToast === 'function'){
+    if (typeof showToast === 'function') {
       showToast('Piste retirée de la playlist');
     }
   };
 
   // ── 3. ROBUST STARTUP ──
-  function boot(){
+  function boot() {
     initAmbientCanvas();
     initDB().then(() => {
       initPlayerDOM();
@@ -587,7 +587,7 @@
     });
   }
 
-  if(document.readyState === 'loading'){
+  if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();
