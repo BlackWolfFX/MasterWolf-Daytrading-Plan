@@ -911,7 +911,20 @@ function loadEntries(){
   try{entries=JSON.parse(localStorage.getItem('mw-entries')||'[]');}catch(e){entries=[];}
   renderJournal();
 }
-function saveEntries(){localStorage.setItem('mw-entries',JSON.stringify(entries));}
+function saveEntries(){
+  localStorage.setItem('mw-entries',JSON.stringify(entries));
+  if(typeof window.pushJournalToCloud === 'function'){
+    window.pushJournalToCloud(entries);
+  }
+}
+
+window.refreshEntriesFromCloud = function(cloudEntries){
+  if(Array.isArray(cloudEntries)){
+    entries = cloudEntries;
+    renderJournal();
+    loadStats();
+  }
+};
 
 function renderJournal(){
   const list=document.getElementById('journal-list');
